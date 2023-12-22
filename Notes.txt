@@ -1,5 +1,9 @@
-CHECK:
--populate --> reference mongodb
+TODO-Backend: 
+-Upload images
+-Payment
+
+
+TODO-FRONTEND: 
 
 
 
