@@ -24,6 +24,10 @@ const orderSchema = mongoose.Schema(
             type: Number,
             required: true,
           },
+          size: {
+            type: String,
+            required: true,
+          },
         },
       ],
       required: true,
@@ -121,6 +125,18 @@ export const getOrdersInLastNDays = async (n) => {
         $gte: new Date(new Date() - n * 60 * 60 * 24 * 1000),
       },
     })
+      .populate("user_id")
+      .populate("products.product_id");
+    return orders;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// get orders by status
+export const getOrdersByStatus = async (status) => {
+  try {
+    const orders = await Order.find({ status })
       .populate("user_id")
       .populate("products.product_id");
     return orders;

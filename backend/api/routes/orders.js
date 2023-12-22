@@ -12,8 +12,9 @@ import {
   getOrdersByUser,
   updateOrder,
   deleteOrder,
+  getOrdersByStatus,
 } from "../models/order.js";
-import { getProductById } from "../models/product.js";
+import { getProductById, updateProduct } from "../models/product.js";
 import { verifyToken } from "../middlewares/token.js";
 
 const router = express.Router();
@@ -67,6 +68,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/status/:status", verifyToken, async (req, res) => {
+  try {
+    const role = req.role;
+    if (role !== "admin") {
+      return res.status(403).json({
+        message: "You are not authorized to access this route",
+      });
+    }
+
+    const orders = await getOrdersByStatus(req.params.status);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/", verifyToken, async (req, res) => {
   try {
     if (req.role !== "user") {
@@ -75,7 +92,7 @@ router.post("/", verifyToken, async (req, res) => {
       });
     }
 
-    const { products, delivery_address, payment_method } = req.body;
+    const { products, delivery_address, payment_method, size } = req.body;
     if (!products || !delivery_address || !payment_method) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -84,10 +101,31 @@ router.post("/", verifyToken, async (req, res) => {
       return res.status(400).json({ message: "Invalid card number" });
     }
 
-    const total_price = await products.reduce(async (total, item) => {
+    let total_price = 0;
+    for (const item of products) {
       const product = await getProductById(item.product_id);
-      return total + product.price * item.quantity;
-    }, 0);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      total_price = total_price + product.price * item.quantity;
+
+      const sizeIndex = product.sizes.findIndex(
+        (sizeItem) => sizeItem.size === item.size
+      );
+      if (sizeIndex === -1) {
+        return res.status(400).json({ message: "Size not found" });
+      }
+
+      if (product.sizes[sizeIndex].quantity < item.quantity) {
+        return res.status(400).json({ message: "Not enough quantity" });
+      }
+
+      product.sizes[sizeIndex].quantity -= item.quantity;
+      product.quantity -= item.quantity;
+      product.size = size;
+
+      await updateProduct(product._id, product);
+    }
 
     const user_id = req.user_id;
     const newOrder = {
@@ -105,6 +143,8 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+// ordered --> cancelled
+// ordered --> delivered
 router.put("/:id/status", verifyToken, async (req, res) => {
   try {
     const role = req.role;
@@ -128,6 +168,34 @@ router.put("/:id/status", verifyToken, async (req, res) => {
       status !== "delivered"
     ) {
       return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const order = await getOrderById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (status === "cancelled") {
+      for (const item of order.products) {
+        const product = await getProductById(item.product_id);
+        if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+        }
+
+        const sizeIndex = product.sizes.findIndex(
+          (sizeItem) => sizeItem.size === item.size
+        );
+        if (sizeIndex === -1) {
+          return res.status(400).json({ message: "Size not found" });
+        }
+
+        if (status === "cancelled") {
+          product.sizes[sizeIndex].quantity += item.quantity;
+          product.quantity += item.quantity;
+        }
+
+        await updateProduct(product._id, product);
+      }
     }
 
     const result = await updateOrder(req.params.id, { status });

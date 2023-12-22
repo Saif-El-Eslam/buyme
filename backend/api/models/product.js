@@ -22,6 +22,23 @@ const productSchema = mongoose.Schema(
       type: [String],
       required: "Image is required",
     },
+    sizes: {
+      type: [
+        {
+          size: {
+            type: String,
+            required: "Size is required",
+          },
+          quantity: {
+            type: Number,
+            default: 0,
+            required: "Quantity is required",
+          },
+        },
+      ],
+      default: [],
+      required: "Size is required",
+    },
     quantity: {
       type: Number,
       default: 0,
@@ -71,6 +88,16 @@ export const getProductsByCategory = async (category) => {
   try {
     const products = await Product.find({ category });
     return products;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// get product by size and id
+export const getProductBySizeAndId = async (id, size) => {
+  try {
+    const product = await Product.findOne({ _id: id, "sizes.size": size });
+    return product;
   } catch (error) {
     throw new Error(error.message);
   }

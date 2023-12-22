@@ -50,8 +50,8 @@ router.get("/category/:category", async (req, res) => {
 
 router.post("/", verifyToken, async (req, res) => {
   try {
-    const { title, description, price, category, images, quantity } = req.body;
-    if (!title || !price || !category || !images || !quantity) {
+    const { title, description, price, category, images, sizes } = req.body;
+    if (!title || !price || !category || !images) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -62,6 +62,8 @@ router.post("/", verifyToken, async (req, res) => {
       });
     }
 
+    const quantity = sizes.reduce((sum, curr) => sum + curr.quantity, 0);
+
     const product = {
       title,
       description,
@@ -69,6 +71,7 @@ router.post("/", verifyToken, async (req, res) => {
       category,
       images,
       quantity,
+      sizes,
     };
 
     const newProduct = await createProduct(product);

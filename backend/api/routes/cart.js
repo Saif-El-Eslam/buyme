@@ -29,11 +29,20 @@ router.get("/", verifyToken, async (req, res) => {
 router.put("/add-product", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
-    const { product_id, quantity } = req.body;
+    const { product_id, quantity, size } = req.body;
 
     const product = await getProductById(product_id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
+    }
+
+    const sizeIndex = product.sizes.findIndex((item) => item.size === size);
+    if (sizeIndex === -1) {
+      return res.status(404).json({ message: "Size not found" });
+    }
+
+    if (quantity > product.sizes[sizeIndex].quantity) {
+      return res.status(404).json({ message: "Quantity not available" });
     }
 
     const cart = await getCartByUser(user_id);
@@ -44,6 +53,7 @@ router.put("/add-product", verifyToken, async (req, res) => {
           {
             product_id,
             quantity,
+            size,
           },
         ],
         total_price: product.price * quantity,
@@ -57,13 +67,14 @@ router.put("/add-product", verifyToken, async (req, res) => {
       return item.product_id._id.toString() === product_id;
     });
 
-    if (productIndex > -1) {
+    if (productIndex > -1 && cart.products[productIndex].size === size) {
       cart.products[productIndex].quantity += quantity;
       cart.total_price += product.price * quantity;
     } else {
       cart.products.push({
         product_id,
         quantity,
+        size,
       });
       cart.total_price += product.price * quantity;
     }
@@ -80,7 +91,7 @@ router.put("/add-product", verifyToken, async (req, res) => {
 router.put("/remove-product", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
-    const { product_id } = req.body;
+    const { product_id, size } = req.body;
 
     const cart = await getCartByUser(user_id);
     if (!cart) {
@@ -91,12 +102,14 @@ router.put("/remove-product", verifyToken, async (req, res) => {
       return item.product_id._id.toString() === product_id;
     });
 
-    if (productIndex > -1) {
+    if (productIndex > -1 && cart.products[productIndex].size === size) {
       const product = cart.products[productIndex];
       cart.products.splice(productIndex, 1);
       cart.total_price -= product.product_id.price * product.quantity;
     } else {
-      return res.status(404).json({ message: "Product not found in cart" });
+      return res
+        .status(404)
+        .json({ message: "Product with this size not found in cart" });
     }
 
     const result = await updateCart(cart._id, cart);
@@ -111,7 +124,7 @@ router.put("/remove-product", verifyToken, async (req, res) => {
 router.put("/increase-product-quantity", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
-    const { product_id } = req.body;
+    const { product_id, size } = req.body;
 
     const cart = await getCartByUser(user_id);
     if (!cart) {
@@ -119,7 +132,9 @@ router.put("/increase-product-quantity", verifyToken, async (req, res) => {
     }
 
     const productIndex = cart.products.findIndex((item) => {
-      return item.product_id._id.toString() === product_id;
+      return (
+        item.product_id._id.toString() === product_id && item.size === size
+      );
     });
 
     if (productIndex > -1) {
@@ -142,7 +157,7 @@ router.put("/increase-product-quantity", verifyToken, async (req, res) => {
 router.put("/decrease-product-quantity", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
-    const { product_id } = req.body;
+    const { product_id, size } = req.body;
 
     const cart = await getCartByUser(user_id);
     if (!cart) {
@@ -150,7 +165,9 @@ router.put("/decrease-product-quantity", verifyToken, async (req, res) => {
     }
 
     const productIndex = cart.products.findIndex((item) => {
-      return item.product_id._id.toString() === product_id;
+      return (
+        item.product_id._id.toString() === product_id && item.size === size
+      );
     });
 
     if (productIndex > -1) {
