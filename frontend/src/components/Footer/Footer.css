@@ -1,0 +1,177 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  height: fit-content;
+
+  background-color: #123026;
+  color: aliceblue;
+}
+
+.footer .logo {
+  width: 10rem;
+
+  margin-top: 70px;
+
+  width: 200px;
+}
+
+.footer .logo img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.footer .logo .slogan {
+  font-size: 16px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  width: 60%;
+
+  margin: 0 auto;
+}
+
+.footer .contact-us {
+  min-width: 215px;
+}
+.footer .account {
+  min-width: 190px;
+}
+.footer .our-shop {
+  min-width: 90px;
+}
+.footer .contact-us,
+.footer .account,
+.footer .our-shop {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  margin: 2rem 0.5rem 4rem;
+}
+
+.footer .contact-us .title,
+.footer .account .title,
+.footer .our-shop .title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.footer .contact-us .content,
+.footer .account .content,
+.footer .our-shop .content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 1rem;
+}
+
+.footer .contact-us .content .address,
+.footer .contact-us .content .phone,
+.footer .contact-us .content .email {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer .contact-us .content .icon img {
+  width: 1.25rem;
+}
+
+.footer .footer-content .contact-us .content .address,
+.footer .footer-content .contact-us .content .phone,
+.footer .footer-content .contact-us .content .email {
+  border-radius: 0.25rem;
+  width: fit-content;
+  padding: 0.25rem 0.5rem;
+}
+
+.footer .footer-content .our-shop .content .item,
+.footer .footer-content .account .content .item {
+  border-radius: 0.25rem;
+  width: fit-content;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.footer .footer-content .our-shop .content .item:hover,
+.footer .footer-content .account .content .item:hover {
+  background-color: #1a4436;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.footer .footer-content .our-shop .content .item:active,
+.footer .footer-content .account .content .item:active {
+  background-color: #205140;
+
+  transition: all 0.2s ease-in-out;
+}
+
+/* for screen size < 850 */
+@media screen and (max-width: 850px) {
+  .footer .logo {
+    margin: auto 50px auto 0px;
+  }
+
+  .footer .our-shop {
+    margin: 0;
+  }
+
+  .footer .contact-us {
+    margin: 0;
+  }
+
+  .footer .account {
+    margin: 0;
+  }
+
+  .footer .content {
+    margin-bottom: 40px;
+  }
+
+  .footer .contact-us .content,
+  .footer .account .content,
+  .footer .our-shop .content {
+    width: 180px;
+  }
+}
+
+.footer-closed-list {
+  flex-direction: column;
+  align-items: left;
+  width: 50%;
+  padding: 0rem 5%;
+}
+
+.footer-closed-list-item {
+  width: fit-content;
+  height: fit-content;
+
+  display: flex;
+  align-items: center;
+}
+.footer .title-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.arrow {
+  width: 12px;
+  padding: 5px;
+
+  cursor: pointer;
+}
+
+.arrow img {
+  width: 100%;
+}

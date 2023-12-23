@@ -16,6 +16,7 @@ const productSchema = mongoose.Schema(
     },
     category: {
       type: String,
+      enum: ["T-shirts", "shirts", "pants", "shorts", "jackets", "hoodies"],
       required: "Category is required",
     },
     images: {
@@ -67,6 +68,16 @@ export const createProduct = async (product) => {
 export const getProducts = async () => {
   try {
     const products = await Product.find();
+    return products;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// get n products after skipping m products
+export const getProductsByPage = async (n, m) => {
+  try {
+    const products = await Product.find().limit(n).skip(m);
     return products;
   } catch (error) {
     throw new Error(error.message);

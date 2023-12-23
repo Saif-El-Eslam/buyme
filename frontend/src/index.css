@@ -1,13 +1,102 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  width: 100%;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* general styles */
+.font-1 {
+  font-family: "Kosugi Maru", sans-serif;
+}
+
+.font-2 {
+  font-family: "Sarala", sans-serif;
+  font-weight: 700;
+}
+
+.font-3 {
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
+}
+
+.font-4 {
+  font-family: "Russo One", "Oswald", sans-serif;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+
+  width: fit-content;
+
+  cursor: pointer;
+}
+
+.button-wrapper .button-green {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 200px;
+  height: 50px;
+
+  background-color: #123026;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+
+  font-size: 1.25rem;
+  font-weight: 400;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-green:hover {
+  background-color: rgb(16, 42, 33);
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-green:active {
+  background-color: #0d1a13;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-white {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 200px;
+  height: 50px;
+
+  background-color: #fff;
+  color: #123026;
+  border: none;
+  border-radius: 5px;
+
+  font-size: 1.25rem;
+  font-weight: 400;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-white:hover {
+  background-color: #f1f1f1;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-white:active {
+  background-color: #e1e1e1;
+  transition: all 0.2s ease-in-out;
 }

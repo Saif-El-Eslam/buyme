@@ -10,6 +10,7 @@ import {
   getProductsByCategory,
   updateProduct,
   deleteProduct,
+  getProductsByPage,
 } from "../models/product.js";
 import { verifyToken } from "../middlewares/token.js";
 
@@ -19,6 +20,22 @@ router.get("/", async (req, res) => {
   try {
     const products = await getProducts();
     res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// get n products after skipping m products
+router.get("/skip/:pagesCount/take/:ordersCount", async (req, res) => {
+  try {
+    const products = await getProductsByPage(
+      req.params.ordersCount,
+      req.params.pagesCount * req.params.ordersCount
+    );
+
+    const pagesCount = Math.ceil(products.length / req.params.ordersCount);
+
+    res.json({ pagesCount, products });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
