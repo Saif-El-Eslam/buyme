@@ -3,7 +3,7 @@ import "./CategoryCard.css";
 
 function CategoryCard({ category, imgURL }) {
   const [hovered, setHovered] = useState(false);
-  console.log(hovered);
+
   return (
     <div
       className="category-card"
@@ -12,7 +12,7 @@ function CategoryCard({ category, imgURL }) {
     >
       <div className="category-card-image">
         <img
-          className={hovered && "category-card-image-hovered"}
+          className={hovered ? "category-card-image-hovered" : ""}
           src={imgURL}
           alt="tshirt"
         />

@@ -33,6 +33,10 @@ code {
   font-family: "Russo One", "Oswald", sans-serif;
 }
 
+.font-5 {
+  font-family: "Fira Sans", sans-serif;
+}
+
 .button-wrapper {
   display: flex;
   justify-content: center;
@@ -97,6 +101,34 @@ code {
 }
 
 .button-wrapper .button-white:active {
+  background-color: #e1e1e1;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-border-green {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 200px;
+  height: 50px;
+
+  background-color: transparent;
+  color: #123026;
+  border: 2px solid #123026;
+  border-radius: 5px;
+
+  font-size: 1.25rem;
+  font-weight: 400;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-border-green:hover {
+  background-color: #f1f1f1;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wrapper .button-border-green:active {
   background-color: #e1e1e1;
   transition: all 0.2s ease-in-out;
 }

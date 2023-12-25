@@ -35,7 +35,7 @@
 }
 
 .footer .contact-us {
-  min-width: 215px;
+  min-width: 200px;
 }
 .footer .account {
   min-width: 190px;
@@ -162,7 +162,7 @@
 .footer .title-wrapper {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: fit-content;
 }
 
 .arrow {
