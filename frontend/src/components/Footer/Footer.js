@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const [ourShopOpen, setOurShopOpen] = useState(false);
@@ -58,12 +60,42 @@ function Footer() {
           </div>
           {(screenWidth > 850 || ourShopOpen) && (
             <div className="content font-3">
-              <div className="item">T-shirts</div>
-              <div className="item">Shirts</div>
-              <div className="item">Pants</div>
-              <div className="item">Shorts</div>
-              <div className="item">Jackets</div>
-              <div className="item">Hoodies</div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/t-shirts")}
+              >
+                T-shirts
+              </div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/shirts")}
+              >
+                Shirts
+              </div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/pants")}
+              >
+                Pants
+              </div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/shorts")}
+              >
+                horts
+              </div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/jackets")}
+              >
+                Jackets
+              </div>
+              <div
+                className="item"
+                onClick={() => navigate("/products/category/hoodies")}
+              >
+                Hoodies
+              </div>
             </div>
           )}
         </div>

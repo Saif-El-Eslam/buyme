@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
   const categoriesRef = useRef(null);
 
   // get the size of the screen
@@ -67,12 +69,42 @@ function Header() {
         )}
         {(screenWidth > 850 || categoriesOpen) && (
           <div className="categories" ref={categoriesRef}>
-            <div className="category">T-shirts</div>
-            <div className="category">Shirts</div>
-            <div className="category">Pants</div>
-            <div className="category">Shorts</div>
-            <div className="category">Jackets</div>
-            <div className="category">Hoodies</div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/t-shirts")}
+            >
+              T-shirts
+            </div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/shirts")}
+            >
+              Shirts
+            </div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/pants")}
+            >
+              Pants
+            </div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/shorts")}
+            >
+              Shorts
+            </div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/jackets")}
+            >
+              Jackets
+            </div>
+            <div
+              className="category"
+              onClick={() => navigate("/products/category/hoodies")}
+            >
+              Hoodies
+            </div>
           </div>
         )}
       </div>
