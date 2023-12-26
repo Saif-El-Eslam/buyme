@@ -15,6 +15,10 @@ code {
 }
 
 /* general styles */
+.font-0 {
+  font-family: "Roboto", sans-serif;
+}
+
 .font-1 {
   font-family: "Kosugi Maru", sans-serif;
 }
@@ -35,6 +39,10 @@ code {
 
 .font-5 {
   font-family: "Fira Sans", sans-serif;
+}
+
+.font-6 {
+  font-family: "Oswald", sans-serif;
 }
 
 .button-wrapper {
@@ -131,4 +139,14 @@ code {
 .button-wrapper .button-border-green:active {
   background-color: #e1e1e1;
   transition: all 0.2s ease-in-out;
+}
+
+.login-to-access {
+  font-size: 10px;
+  color: rgb(128, 128, 128);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: inherit;
 }

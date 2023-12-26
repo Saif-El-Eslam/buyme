@@ -1,0 +1,151 @@
+.filter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  margin: 3rem 0 4rem 0;
+  padding: 0 0 0.5rem 0;
+
+  border-bottom: 1px solid #ccc;
+}
+
+.filter-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0.5rem 0;
+}
+
+.filter-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selector-container-sizes {
+  padding: 5px 10px;
+  width: 75px;
+  height: 25px;
+}
+
+.selector-container-sort {
+  padding: 5px 10px;
+  width: 175px;
+  height: 25px;
+}
+
+.filter-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.filter-right-sort {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-right-products-num {
+  width: 6rem;
+}
+
+.filter-selected-options {
+  display: grid;
+  /* auto fit but max width of the item is 50px */
+  grid-template-columns: repeat(auto-fit, 110px);
+  gap: 0.5rem;
+}
+
+.filter-selected-option {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  height: fit-content;
+  max-width: 100px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.filter-selected-option:hover {
+  border: 4px solid #ccc;
+  padding: 2px 9px;
+}
+
+.filter-selected-option-x {
+  height: fit-content;
+  width: fit-content;
+
+  font-size: 12px;
+
+  margin: 0 0 0 15px;
+}
+
+.filter-remove-all {
+  height: fit-content;
+  font-size: 16px;
+
+  border-bottom: 1px solid #ccc;
+
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.filter-remove-all:hover {
+  border-bottom: 3px solid #ccc;
+}
+
+.filter-remove-all:active {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 850px) {
+  .filter {
+    margin: 2rem 0 3rem 0;
+  }
+
+  .filter-wrapper {
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+  }
+
+  .filter-left {
+    width: 100%;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .filter-right {
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .filter-right-sort {
+    width: 100%;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .filter-right-products-num {
+    width: 100%;
+  }
+}

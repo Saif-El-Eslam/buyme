@@ -3,9 +3,12 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/Footer";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const [productsHome, setProductsHome] = useState([
     {
       category: "T-shirt",
@@ -57,6 +60,10 @@ function HomePage() {
       setProductsHome([...productsHome]);
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="home-page">
       <Header />
@@ -71,7 +78,10 @@ function HomePage() {
               Fit all your needs.
             </div>
 
-            <div className="button-wrapper font-3">
+            <div
+              className="button-wrapper font-3"
+              onClick={() => navigate("/products")}
+            >
               <div className="button-white">Shop Now</div>
             </div>
           </div>
@@ -140,7 +150,10 @@ function HomePage() {
               essentials designed to make you look and feel your best.
             </div>
 
-            <div className="button-wrapper font-3">
+            <div
+              className="button-wrapper font-3"
+              onClick={() => navigate("/products")}
+            >
               <div className="button-green">Take A Look</div>
             </div>
           </div>
@@ -178,7 +191,10 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="button-wrapper font-3 section-section-3-products-button">
+            <div
+              className="button-wrapper font-3 section-section-3-products-button"
+              onClick={() => navigate("/products")}
+            >
               <div className="button-border-green font-5">Discover All</div>
             </div>
           </div>

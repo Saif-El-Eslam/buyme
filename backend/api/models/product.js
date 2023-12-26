@@ -12,6 +12,7 @@ const productSchema = mongoose.Schema(
     },
     price: {
       type: Number,
+      enum: ["S", "M", "L", "XL", "XXL"],
       required: "Price is required",
     },
     category: {

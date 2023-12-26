@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Footer.css";
+import { Link } from "react-router-dom";
 
 function Footer() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -23,7 +24,9 @@ function Footer() {
   return (
     <div className="footer">
       <div className="logo">
-        <img src="/logo-white.png" alt="logo" />
+        <Link to="/" className="nav-link">
+          <img src="/logo-white.png" alt="logo" />
+        </Link>
         <div className="slogan">
           The best to buy
           <br /> All time, any occasion!
