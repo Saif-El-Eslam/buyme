@@ -13,36 +13,42 @@ function CategoryProducts() {
   const [pageNumber, setPageNumber] = useState(1);
   const categoryProducts = [
     {
+      id: 1,
       category: "T-shirt",
       productName: "Cotton T-shirt",
       price: 20,
       imgURL: "http://localhost:3001/categories/t-shirt.jpg",
     },
     {
+      id: 2,
       category: "shirt",
       productName: "Green Cotton shirt",
       price: 20,
       imgURL: "http://localhost:3001/categories/shirt.jpg",
     },
     {
+      id: 3,
       category: "Shorts",
       productName: "Blue Jeens Cargo Shorts",
       price: 20,
       imgURL: "http://localhost:3001/categories/shorts.jpg",
     },
     {
+      id: 4,
       category: "Pants",
       productName: "Olive Cargo Pants",
       price: 20,
       imgURL: "http://localhost:3001/categories/pants.jpg",
     },
     {
+      id: 5,
       category: "Jacket",
       productName: "Black Bomber Jacket",
       price: 20,
       imgURL: "http://localhost:3001/categories/jacket.jpg",
     },
     {
+      id: 6,
       category: "Hoodie",
       productName: "Green Cotton Hoodie",
       price: 20,

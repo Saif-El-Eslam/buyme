@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./CategoryCard.css";
+import { useNavigate } from "react-router-dom";
 
 function CategoryCard({ category, imgURL }) {
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -9,6 +11,7 @@ function CategoryCard({ category, imgURL }) {
       className="category-card"
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={() => navigate(`/products/category/${category}`)}
     >
       <div className="category-card-image">
         <img

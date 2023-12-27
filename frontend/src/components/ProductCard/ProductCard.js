@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import "./ProductCard.css";
+import { useNavigate } from "react-router-dom";
 
-function ProductCard({ product: { category, productName, price, imgURL } }) {
+function ProductCard({
+  product: { category, productName, price, imgURL, id },
+}) {
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
   // console.log(hovered);
   return (
@@ -21,7 +25,10 @@ function ProductCard({ product: { category, productName, price, imgURL } }) {
               </div>
             </div>
 
-            <div className="button-wrapper font-5">
+            <div
+              className="button-wrapper font-5"
+              onClick={() => navigate(`/products/${id}`)}
+            >
               <div className="button-border-green-product-card">View</div>
             </div>
           </div>
