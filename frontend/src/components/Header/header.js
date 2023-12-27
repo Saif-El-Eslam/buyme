@@ -113,7 +113,12 @@ function Header() {
         <div className="icon">
           <img src="/search.png" alt="search" />
         </div>
-        <div className="icon">
+        <div
+          className="icon"
+          onClick={
+            () => (false ? navigate("profile") : navigate("/profile/login")) // check if the user is logged in
+          }
+        >
           <img src="/profile.png" alt="user" />
         </div>
         <div className="icon">
