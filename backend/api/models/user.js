@@ -38,9 +38,9 @@ const userSchema = new mongoose.Schema(
           type: String,
           required: "City is required",
         },
-        state: {
+        governorate: {
           type: String,
-          required: "State is required",
+          required: "Governorate is required",
         },
         country: {
           type: String,

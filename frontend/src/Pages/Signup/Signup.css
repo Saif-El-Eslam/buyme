@@ -72,8 +72,8 @@
   gap: 1rem;
 }
 
-.signup-fieled-wrapper {
-  height: 50px;
+.signup-field-wrapper {
+  height: 40px;
   padding: 0 0.5rem;
 
   display: flex;
@@ -84,7 +84,7 @@
   border-radius: 5px;
 }
 
-.signup-fieled-wrapper input {
+.signup-field-wrapper input {
   width: 100%;
   height: 90%;
 
@@ -122,6 +122,14 @@
   justify-content: center;
 
   color: red;
+}
+
+.signup-button-wrapper {
+  height: 40px;
+}
+
+.signup-button-wrapper .button-green {
+  height: 100%;
 }
 
 .signup-have-acount {

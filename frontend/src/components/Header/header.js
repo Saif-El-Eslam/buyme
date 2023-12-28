@@ -11,8 +11,8 @@ function Header() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
 
-  // update the size of the screen when the window is resized
   useEffect(() => {
+    // handle screen size
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -20,7 +20,7 @@ function Header() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [window.innerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // Function to handle clicks outside the menu
@@ -116,7 +116,7 @@ function Header() {
         <div
           className="icon"
           onClick={
-            () => (false ? navigate("profile") : navigate("/profile/login")) // check if the user is logged in
+            () => (false ? navigate("/profile") : navigate("/profile/login")) // check if the user is logged in
           }
         >
           <img src="/profile.png" alt="user" />

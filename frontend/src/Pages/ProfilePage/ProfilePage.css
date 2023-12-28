@@ -1,0 +1,350 @@
+.profile-page {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-content {
+  width: 60%;
+  height: 100%;
+  min-height: 70vh;
+
+  margin: 0 auto;
+}
+
+.profile-header {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-info-wrapper {
+  height: 100%;
+  margin: 2rem 0;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+
+  /* make shadow effect */
+  /* background-color: #f0f0f0; */
+  border-radius: 0.2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-tabs {
+  width: 100%;
+  height: 100%;
+  margin: 1rem 0;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 0.5rem;
+
+  color: #123026;
+}
+.profile-tab {
+  width: fit-content;
+  height: 100%;
+  padding: 0.5rem 2rem;
+
+  border-radius: 0.2rem;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  cursor: pointer;
+}
+.profile-tab:hover {
+  background-color: #f0f0f0;
+}
+.profile-tab-selected {
+  background-color: rgba(32, 128, 96, 0.2);
+}
+.profile-tab-selected:hover {
+  background-color: rgba(32, 128, 96, 0.2);
+}
+
+.profile-tab-details {
+  width: 100%;
+  height: 100%;
+  padding: 1rem 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  gap: 1.5rem;
+}
+
+.profile-section-header {
+  padding: 1rem 0;
+
+  font-size: 1.5rem;
+}
+
+.profile-info-section,
+.profile-address-section,
+.profile-payment-section {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+}
+
+.profile-info-section-title {
+  width: fit-content;
+  height: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  font-size: 0.8rem;
+  color: rgba(18, 48, 38, 0.8);
+}
+
+.profile-info-section-content-name-wrapper {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  font-size: 1.2rem;
+  color: #123026;
+}
+
+.profile-field-wrapper {
+  height: 40px;
+  padding: 0 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  border: 1px solid rgba(1, 91, 61, 0.2);
+  border-radius: 5px;
+}
+
+.profile-field-wrapper input {
+  width: 100%;
+  height: 90%;
+
+  border: none;
+  outline: none;
+
+  font-size: 1.1rem;
+  color: #123026;
+
+  font-family: "Gabarito", "Roboto", sans-serif;
+}
+
+.profile-info-section-title-password {
+  width: fit-content;
+  height: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  font-size: 1rem;
+  color: #123026;
+  border-bottom: 2px solid rgba(18, 48, 38, 0.5);
+
+  cursor: pointer;
+}
+.profile-info-section-title-password-clicked {
+  border-bottom: 2px solid rgba(18, 48, 38, 0);
+}
+
+.profile-info-section-content-password {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  font-size: 1.2rem;
+  color: #123026;
+}
+
+.profile-info-section-passwords {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-info-section-password-button {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.profile-info-section-password-button .button-wrapper {
+  margin: 10px 0 0;
+}
+.profile-info-section-password-button .button-wrapper .button-green {
+  width: 140px;
+  height: 40px;
+
+  font-size: 0.9rem;
+}
+
+.profile-info-section-content-password-show {
+  display: flex;
+  text-align: center;
+  align-items: center;
+
+  font-size: 1rem;
+
+  cursor: pointer;
+}
+
+.profile-address-section-title {
+  width: fit-content;
+  height: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  font-size: 0.8rem;
+  color: rgba(18, 48, 38, 0.8);
+}
+
+.profile-info-section-content,
+.profile-address-section-content,
+.profile-payment-section-content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-address-section-country-governorate-city {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.profile-info-update-info-button {
+  margin-top: 0.5rem;
+}
+
+.profile-info-section-button,
+.profile-address-section-button,
+.profile-payment-section-button {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.profile-info-section-button .button-wrapper,
+.profile-address-section-button .button-wrapper,
+.profile-payment-section-button .button-wrapper {
+  margin: 0;
+}
+.profile-info-section-button .button-wrapper .button-green,
+.profile-address-section-button .button-wrapper .button-green,
+.profile-payment-section-button .button-wrapper .button-green {
+  width: 140px;
+  height: 40px;
+
+  font-size: 1rem;
+}
+
+.profile-address-section-sub-title,
+.profile-payment-section-sub-title {
+  width: fit-content;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  font-size: 0.7rem;
+  color: rgba(18, 48, 38, 0.8);
+}
+
+.profile-payment-section-date-cvv {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.profile-info-section-name,
+.profile-info-section-email,
+.profile-info-section-phone,
+.profile-address-section-city,
+.profile-address-section-country,
+.profile-address-section-governorate,
+.profile-address-section-street,
+.profile-address-section-notes,
+.profile-payment-section-card-number,
+.profile-payment-section-expiry-date,
+.profile-payment-section-cvv,
+.profile-payment-section-notes {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-section-header {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-section-header-arrow {
+  width: 15px;
+  height: 15px;
+}
+.profile-section-header-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+.line-separator {
+  width: 90%;
+  height: 2px;
+  margin: auto;
+
+  background-color: rgba(18, 48, 38, 0.1);
+}
+
+@media screen and (max-width: 850px) {
+  .profile-content {
+    width: 90%;
+    height: 100%;
+  }
+
+  .profile-info-section-content-password {
+    grid-template-columns: 1fr;
+  }
+}

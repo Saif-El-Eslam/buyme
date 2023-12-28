@@ -40,7 +40,7 @@ function Signup() {
 
           <div className="signup-inputs">
             <div className="signup-name-wrapper">
-              <div className="signup-first-name-wrapper signup-fieled-wrapper">
+              <div className="signup-first-name-wrapper signup-field-wrapper">
                 <input
                   type="text"
                   placeholder="First Name"
@@ -50,7 +50,7 @@ function Signup() {
                   }
                 />
               </div>
-              <div className="signup-last-name-wrapper signup-fieled-wrapper">
+              <div className="signup-last-name-wrapper signup-field-wrapper">
                 <input
                   type="text"
                   placeholder="Last Name"
@@ -62,7 +62,7 @@ function Signup() {
               </div>
             </div>
 
-            <div className="signup-email-wrapper signup-fieled-wrapper">
+            <div className="signup-email-wrapper signup-field-wrapper">
               <input
                 type="text"
                 placeholder="Email"
@@ -71,7 +71,7 @@ function Signup() {
               />
             </div>
 
-            <div className="signup-phone-wrapper signup-fieled-wrapper">
+            <div className="signup-phone-wrapper signup-field-wrapper">
               <input
                 type="text"
                 placeholder="Phone"
@@ -80,27 +80,7 @@ function Signup() {
               />
             </div>
 
-            {/* <div className="signup-address-wrapper">
-              <div className="signup-address-country-governorate-city-wrapper">
-                <div className="signup-address-country-wrapper  signup-fieled-wrapper">
-                  <input type="text" placeholder="Country" />
-                </div>
-
-                <div className="signup-address-governorate-wrapper  signup-fieled-wrapper">
-                  <input type="text" placeholder="Governorate" />
-                </div>
-
-                <div className="signup-address-city-wrapper  signup-fieled-wrapper">
-                  <input type="text" placeholder="City" />
-                </div>
-              </div>
-
-              <div className="signup-address-address-wrapper  signup-fieled-wrapper">
-                <input type="text" placeholder="Street" />
-              </div>
-            </div> */}
-
-            <div className="signup-password-wrapper signup-fieled-wrapper">
+            <div className="signup-password-wrapper signup-field-wrapper">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -116,7 +96,7 @@ function Signup() {
               </div>
             </div>
 
-            <div className="signup-confirm-password-wrapper signup-fieled-wrapper">
+            <div className="signup-confirm-password-wrapper signup-field-wrapper">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"

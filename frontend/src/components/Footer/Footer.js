@@ -12,16 +12,15 @@ function Footer() {
   const [contactUsOpen, setContactUsOpen] = useState(false);
 
   useEffect(() => {
+    // handle screen size
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [window.innerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="footer">
