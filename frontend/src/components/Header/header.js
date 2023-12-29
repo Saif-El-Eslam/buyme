@@ -121,7 +121,7 @@ function Header() {
         >
           <img src="/profile.png" alt="user" />
         </div>
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/cart")}>
           <img src="/shopping-bag.png" alt="cart" />
         </div>
       </div>
