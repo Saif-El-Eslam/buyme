@@ -62,9 +62,10 @@ function ProductDetails() {
       <div className="product-details-content">
         <div className="product-details-left">
           <div className="product-details-left-images-wrapper">
-            {product.images.map((image) => {
+            {product.images.map((image, i) => {
               return (
                 <div
+                  key={i}
                   className="product-details-left-image"
                   onClick={() => setSelectedImage(image)}
                 >
@@ -99,6 +100,7 @@ function ProductDetails() {
                 {product.sizes.map((size) => {
                   return (
                     <div
+                      key={size}
                       className={
                         "product-details-right-size-option font-3" +
                         (selectedSize === size

@@ -10,6 +10,7 @@ function Header() {
   // get the size of the screen
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [admin, setAdmin] = useState(true);
 
   useEffect(() => {
     // handle screen size
@@ -44,70 +45,94 @@ function Header() {
   }, []);
   return (
     <div className="header">
-      <Link to="/" className="nav-link">
+      <Link to={!admin ? "/" : "/admin/products"} className="nav-link">
         <div className="logo">
           <img src="/logo.svg" alt="logo" />
         </div>
       </Link>
 
-      <div className="categories-wrapper">
-        {screenWidth < 850 && (
-          <div
-            className="title-wrapper"
-            onClick={() => setCategoriesOpen(!categoriesOpen)}
-          >
-            <div className="category-title font-2">categories</div>
+      {!admin && (
+        <div className="categories-wrapper">
+          {screenWidth < 850 && (
+            <div
+              className="title-wrapper"
+              onClick={() => setCategoriesOpen(!categoriesOpen)}
+            >
+              <div className="category-title font-2">categories</div>
 
-            <div className="arrow">
-              {categoriesOpen ? (
-                <img src="/arrow-down-black.png" alt="arrow" />
-              ) : (
-                <img src="/arrow-right-black.png" alt="arrow" />
-              )}
+              <div className="arrow">
+                {categoriesOpen ? (
+                  <img src="/arrow-down-black.png" alt="arrow" />
+                ) : (
+                  <img src="/arrow-right-black.png" alt="arrow" />
+                )}
+              </div>
             </div>
-          </div>
-        )}
-        {(screenWidth > 850 || categoriesOpen) && (
-          <div className="categories" ref={categoriesRef}>
+          )}
+          {(screenWidth > 850 || categoriesOpen) && (
+            <div className="categories" ref={categoriesRef}>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/t-shirts")}
+              >
+                T-shirts
+              </div>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/shirts")}
+              >
+                Shirts
+              </div>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/pants")}
+              >
+                Pants
+              </div>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/shorts")}
+              >
+                Shorts
+              </div>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/jackets")}
+              >
+                Jackets
+              </div>
+              <div
+                className="category"
+                onClick={() => navigate("/products/category/hoodies")}
+              >
+                Hoodies
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {admin && (
+        <div className="products-orders-wrapper">
+          {window.location.href.split("/").slice(-1)[0] === "orders" && (
             <div
-              className="category"
-              onClick={() => navigate("/products/category/t-shirts")}
+              className="products-wrapper"
+              onClick={() => navigate("/admin/products")}
             >
-              T-shirts
+              <div className="products-title font-2">All Products</div>
             </div>
+          )}
+
+          {window.location.href.split("/").slice(-1)[0] === "products" && (
             <div
-              className="category"
-              onClick={() => navigate("/products/category/shirts")}
+              className="orders-wrapper"
+              onClick={() => navigate("/admin/orders")}
             >
-              Shirts
+              <div className="orders-title font-2">All Orders</div>
             </div>
-            <div
-              className="category"
-              onClick={() => navigate("/products/category/pants")}
-            >
-              Pants
-            </div>
-            <div
-              className="category"
-              onClick={() => navigate("/products/category/shorts")}
-            >
-              Shorts
-            </div>
-            <div
-              className="category"
-              onClick={() => navigate("/products/category/jackets")}
-            >
-              Jackets
-            </div>
-            <div
-              className="category"
-              onClick={() => navigate("/products/category/hoodies")}
-            >
-              Hoodies
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       <div className="left-icons">
         <div className="icon">
@@ -121,9 +146,11 @@ function Header() {
         >
           <img src="/profile.png" alt="user" />
         </div>
-        <div className="icon" onClick={() => navigate("/cart")}>
-          <img src="/shopping-bag.png" alt="cart" />
-        </div>
+        {!admin && (
+          <div className="icon" onClick={() => navigate("/cart")}>
+            <img src="/shopping-bag.png" alt="cart" />
+          </div>
+        )}
       </div>
     </div>
   );
