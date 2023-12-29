@@ -9,6 +9,7 @@ import CategoryProducts from "./Pages/CategoryProducts/CategoryProducts";
 import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import Cart from "./Pages/Cart/Cart";
 import AdminProducts from "./Pages/AdminProducts/AdminProducts";
+import AdminOrders from "./Pages/AdminOrders/AdminOrders";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
 
         <Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
       </Routes>
     </BrowserRouter>
   );
