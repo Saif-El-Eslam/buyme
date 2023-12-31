@@ -13,6 +13,10 @@ import {
   getProductsByPage,
 } from "../models/product.js";
 import { verifyToken } from "../middlewares/token.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../middlewares/Image.js";
 
 const router = express.Router();
 
@@ -114,29 +118,40 @@ router.put("/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.put("/:id/add-image", verifyToken, async (req, res) => {
-  try {
-    const role = req.role;
-    if (role !== "admin") {
-      return res.status(403).json({
-        message: "Unauthorized: You are not authorized to update a product",
+router.put(
+  "/:id/add-image",
+  verifyToken,
+  uploadToCloudinary,
+  async (req, res) => {
+    try {
+      const role = req.role;
+      if (role !== "admin") {
+        return res.status(403).json({
+          message: "Unauthorized: You are not authorized to update a product",
+        });
+      }
+      const product = await getProductById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      const newimages = req.body.images;
+      const images = product.images;
+
+      newimages.forEach((image) => {
+        if (!images.includes(image)) {
+          images.push(image);
+        }
       });
+
+      console.log(images);
+      const updatedProduct = await updateProduct(req.params.id, { images });
+      res.json(updatedProduct.images);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-
-    const product = await getProductById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    const images = product.images;
-    images.push(req.body.image);
-
-    const updatedProduct = await updateProduct(req.params.id, { images });
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 router.put("/:id/remove-image", verifyToken, async (req, res) => {
   try {
@@ -154,12 +169,24 @@ router.put("/:id/remove-image", verifyToken, async (req, res) => {
 
     const images = product.images;
     const index = images.indexOf(req.body.image);
-    if (index > -1) {
-      images.splice(index, 1);
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
     }
 
-    const updatedProduct = await updateProduct(req.params.id, { images });
-    res.json(updatedProduct);
+    await deleteFromCloudinary(req, res, () => {
+      if (req.body.deleteResponse.result !== "ok") {
+        if (req.body.deleteResponse.result === "not found") {
+          return res
+            .status(404)
+            .json({ message: "Image not found in the cloud" });
+        }
+        return res.status(500).json({ message: "Error deleting image" });
+      } else {
+        images.splice(index, 1);
+        updateProduct(req.params.id, { images });
+        res.json(images);
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
