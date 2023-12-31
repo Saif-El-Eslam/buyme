@@ -10,6 +10,7 @@ import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import Cart from "./Pages/Cart/Cart";
 import AdminProducts from "./Pages/AdminProducts/AdminProducts";
 import AdminOrders from "./Pages/AdminOrders/AdminOrders";
+import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
 
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route
+          path="/admin/products/:id/update"
+          element={<AdminEditProduct />}
+        />
       </Routes>
     </BrowserRouter>
   );

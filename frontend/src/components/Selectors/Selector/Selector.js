@@ -13,7 +13,6 @@ function Selector({
   const [showOptions, setShowOptions] = useState(false);
 
   useEffect(() => {
-    console.log(selectedOption, defaultOption);
     if (!selectedOption && defaultOption) {
       setSelectedOption(defaultOption);
     }

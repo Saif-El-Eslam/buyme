@@ -10,7 +10,7 @@ function AdminProducts() {
 
   const products = [
     {
-      id: 1,
+      id: "658584e4893a4ca4e879b2e2",
       category: "T-shirt",
       productName: "Cotton T-shirt",
       price: 20,
@@ -86,7 +86,7 @@ function AdminProducts() {
                 className="admin-product-card"
                 key={product.id}
                 onClick={() => {
-                  navigate(`/products/update/${product.id}`);
+                  navigate(`/admin/products/${product.id}/update`);
                 }}
               >
                 <div className="admin-product-img">

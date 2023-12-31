@@ -40,7 +40,7 @@ function AdminOrders() {
   ];
 
   return (
-    <div className="admin-prders">
+    <div className="admin-orders">
       <Header />
 
       <div className="admin-orders-wrapper">

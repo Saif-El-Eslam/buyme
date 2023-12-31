@@ -4,6 +4,8 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const urlParts = window.location.href.split("/");
+
   const navigate = useNavigate();
   const categoriesRef = useRef(null);
 
@@ -114,7 +116,7 @@ function Header() {
 
       {admin && (
         <div className="products-orders-wrapper">
-          {window.location.href.split("/").slice(-1)[0] === "orders" && (
+          {urlParts.includes("orders") && (
             <div
               className="products-wrapper"
               onClick={() => navigate("/admin/products")}
@@ -123,7 +125,7 @@ function Header() {
             </div>
           )}
 
-          {window.location.href.split("/").slice(-1)[0] === "products" && (
+          {urlParts.includes("products") && (
             <div
               className="orders-wrapper"
               onClick={() => navigate("/admin/orders")}
