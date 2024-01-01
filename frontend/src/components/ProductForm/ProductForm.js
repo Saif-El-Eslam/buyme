@@ -5,6 +5,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { uploadImage } from "../../Services/ImagesAPICalls";
 
 function ProductForm({ product, setProduct }) {
+  const [createProduct, setCreateProduct] = useState(product.id ? false : true);
+
   const [newImages, setNewImages] = useState([]);
   const [allImages, setAllImages] = useState([]);
   const [oldImages, setOldImages] = useState([]);
@@ -55,6 +57,14 @@ function ProductForm({ product, setProduct }) {
     } else {
       setNewImages((prevState) => prevState.filter((img) => img !== image));
     }
+  };
+
+  const HandleUpdateProductInfo = () => {
+    console.log("update product info");
+  };
+
+  const HandleCreateProduct = () => {
+    console.log("create product");
   };
 
   return (
@@ -180,6 +190,17 @@ function ProductForm({ product, setProduct }) {
         </div>
       </div>
 
+      {!createProduct && (
+        <div className="admin-edit-product-update-info">
+          <div
+            className="admin-edit-product-update-info-button button-wrapper"
+            onClick={HandleUpdateProductInfo}
+          >
+            <div className="button-green font-2">Update Info</div>
+          </div>
+        </div>
+      )}
+
       <div className="admin-edit-product-image">
         <div className="admin-edit-product-image-title font-5">Image</div>
         <div className="admin-edit-product-image-content">
@@ -230,14 +251,25 @@ function ProductForm({ product, setProduct }) {
             </div>
           </div>
 
-          <div
-            className="button-wrapper admin-edit-product-image-upload"
-            onClick={HandleImageUpload}
-          >
-            {newImages.length > 0 && (
-              <div className="button-green font-2">Upload Images</div>
-            )}
-          </div>
+          {!createProduct && (
+            <div
+              className="button-wrapper admin-edit-product-image-upload"
+              onClick={HandleImageUpload}
+            >
+              {newImages.length > 0 && (
+                <div className="button-green font-2">Upload Images</div>
+              )}
+            </div>
+          )}
+
+          {createProduct && (
+            <div
+              className="button-wrapper admin-edit-product-image-upload"
+              onClick={HandleCreateProduct}
+            >
+              <div className="button-green font-2">Create Product</div>
+            </div>
+          )}
         </div>
       </div>
     </div>

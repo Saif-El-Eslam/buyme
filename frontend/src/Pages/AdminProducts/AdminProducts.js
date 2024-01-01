@@ -65,7 +65,12 @@ function AdminProducts() {
       <div className="admin-products-wrapper">
         <div className="admin-products-header">
           <div className="admin-products-title">All Products</div>
-          <div className="admin-products-add-product font-2">+ Add Product</div>
+          <div
+            className="admin-products-add-product font-2"
+            onClick={() => navigate("/admin/products/add")}
+          >
+            + Add Product
+          </div>
         </div>
 
         <div className="admin-products-list">

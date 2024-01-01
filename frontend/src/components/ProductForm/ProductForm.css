@@ -136,6 +136,19 @@
   align-items: flex-end;
 }
 
+.admin-edit-product-update-info-button {
+  width: 150px;
+  height: 40px;
+
+  margin: 0;
+}
+.admin-edit-product-update-info-button .button-green {
+  width: 100%;
+  height: 100%;
+
+  font-size: 0.9rem;
+}
+
 .admin-edit-product-image-content {
   width: 100%;
   height: 100%;

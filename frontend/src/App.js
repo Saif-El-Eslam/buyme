@@ -11,6 +11,7 @@ import Cart from "./Pages/Cart/Cart";
 import AdminProducts from "./Pages/AdminProducts/AdminProducts";
 import AdminOrders from "./Pages/AdminOrders/AdminOrders";
 import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
+import AdminAddProduct from "./Pages/AdminAddProduct/AdminAddProduct";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           path="/admin/products/:id/update"
           element={<AdminEditProduct />}
         />
+        <Route path="/admin/products/add" element={<AdminAddProduct />} />
       </Routes>
     </BrowserRouter>
   );

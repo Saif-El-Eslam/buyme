@@ -1,11 +1,9 @@
 TODO-Backend: 
--Upload images
 -Payment
 
 
 TODO-FRONTEND: 
 -search-functionality
--links in headers and footers
 
 
 
