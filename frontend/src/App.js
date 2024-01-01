@@ -12,6 +12,7 @@ import AdminProducts from "./Pages/AdminProducts/AdminProducts";
 import AdminOrders from "./Pages/AdminOrders/AdminOrders";
 import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
 import AdminAddProduct from "./Pages/AdminAddProduct/AdminAddProduct";
+import OrderDetails from "./Pages/OrderDetails/OrderDetails";
 
 function App() {
   return (
@@ -33,12 +34,13 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
 
         <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
         <Route
           path="/admin/products/:id/update"
           element={<AdminEditProduct />}
         />
         <Route path="/admin/products/add" element={<AdminAddProduct />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/orders/:id" element={<OrderDetails />} />
       </Routes>
     </BrowserRouter>
   );
