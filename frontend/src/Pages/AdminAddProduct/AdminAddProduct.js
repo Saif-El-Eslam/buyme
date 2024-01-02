@@ -42,7 +42,6 @@ function AdminAddProduct() {
     });
 
     createProduct(formData).then((res) => {
-      setLoading(false);
       if (res.status === 201) {
         setInfoMessage(res.data.message);
         setInfoMessageType("info");
@@ -60,6 +59,7 @@ function AdminAddProduct() {
           setInfoMessageType("");
         }, 3000);
       }
+      setLoading(false);
     });
   };
 
@@ -100,6 +100,7 @@ function AdminAddProduct() {
             product={product}
             setProduct={setProduct}
             onAction={OnAddProduct}
+            isCreateProduct={true}
           />
         </div>
       </div>

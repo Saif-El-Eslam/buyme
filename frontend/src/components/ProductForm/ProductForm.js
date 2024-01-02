@@ -2,10 +2,13 @@ import "./ProductForm.css";
 import Selector from "../../components/Selectors/Selector/Selector";
 import { useDropzone } from "react-dropzone";
 import React, { useCallback, useEffect, useState } from "react";
-import { uploadImage } from "../../Services/ImagesAPICalls";
+import { uploadImage, deleteImage } from "../../Services/ImagesAPICalls";
+import InfoMessage from "../../components/Messages/InfoMessage";
 
-function ProductForm({ product, setProduct, onAction }) {
-  const [createProduct, setCreateProduct] = useState(product.id ? false : true);
+function ProductForm({ product, setProduct, onAction, isCreateProduct }) {
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+  const [loading, setLoading] = useState(false);
 
   const [newImages, setNewImages] = useState([]);
   const [allImages, setAllImages] = useState([]);
@@ -26,15 +29,26 @@ function ProductForm({ product, setProduct, onAction }) {
   } = useDropzone({ onDrop });
 
   const HandleImageUpload = async () => {
+    setLoading(true);
+
     const formData = new FormData();
     newImages.forEach((image) => {
       formData.append(`file`, image);
     });
 
     try {
-      uploadImage(product.id, formData).then((data) => {
-        setOldImages((prevState) => [...prevState, ...data]);
+      uploadImage(product._id, formData).then((data) => {
+        console.log(data);
+        setOldImages([...data]);
         setNewImages([]);
+        setLoading(false);
+
+        setInfoMessage("Images uploaded successfully");
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
       });
     } catch (error) {
       console.log("imageUpload" + error);
@@ -48,27 +62,47 @@ function ProductForm({ product, setProduct, onAction }) {
   useEffect(() => {
     setAllImages([...oldImages, ...newImages]);
 
-    if (createProduct) {
+    if (isCreateProduct) {
       setProduct({ ...product, images: [...oldImages, ...newImages] });
     }
   }, [newImages, oldImages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteImage = (image) => {
     if (typeof image === "string") {
-      // handle delete image from database
-      console.log("delete image from database");
-      setOldImages((prevState) => prevState.filter((img) => img !== image));
+      setLoading(true);
+      deleteImage(product._id, [image]).then((data) => {
+        console.log(data);
+        setOldImages((prevState) => prevState.filter((img) => img !== image));
+        setLoading(false);
+
+        setInfoMessage("Image deleted successfully");
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      });
     } else {
       setNewImages((prevState) => prevState.filter((img) => img !== image));
     }
   };
 
-  const HandleUpdateProductInfo = () => {
-    console.log("update product info");
-  };
-
   return (
     <div className="admin-edit-product-form">
+      {infomessage && (
+        <InfoMessage
+          message={infomessage}
+          setMessage={setInfoMessage}
+          type={infoMessageType}
+        />
+      )}
+
+      {loading && (
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+        </div>
+      )}
+
       <div className="admin-edit-product-title">
         <div className="admin-edit-product-title-title font-5">Title</div>
         <div className="admin-edit-product-title-content">
@@ -190,11 +224,11 @@ function ProductForm({ product, setProduct, onAction }) {
         </div>
       </div>
 
-      {!createProduct && (
+      {!isCreateProduct && (
         <div className="admin-edit-product-update-info">
           <div
             className="admin-edit-product-update-info-button button-wrapper"
-            onClick={HandleUpdateProductInfo}
+            onClick={onAction}
           >
             <div className="button-green font-2">Update Info</div>
           </div>
@@ -251,7 +285,7 @@ function ProductForm({ product, setProduct, onAction }) {
             </div>
           </div>
 
-          {!createProduct && (
+          {!isCreateProduct && (
             <div
               className="button-wrapper admin-edit-product-image-upload"
               onClick={HandleImageUpload}
@@ -262,7 +296,7 @@ function ProductForm({ product, setProduct, onAction }) {
             </div>
           )}
 
-          {createProduct && (
+          {isCreateProduct && (
             <div
               className="button-wrapper admin-edit-product-image-upload"
               onClick={onAction}

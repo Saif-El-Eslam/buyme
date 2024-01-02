@@ -127,8 +127,24 @@ router.put("/:id", verifyToken, async (req, res) => {
       });
     }
 
-    const updatedProduct = await updateProduct(req.params.id, req.body);
-    res.json(updatedProduct);
+    const sizes = req.body.sizes;
+    const quantity = sizes.reduce(
+      (sum, curr) => sum + parseFloat(curr.quantity),
+      0
+    );
+
+    const newProduct = {
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
+      images: req.body.images,
+      quantity,
+      sizes,
+    };
+
+    const updatedProduct = await updateProduct(req.params.id, newProduct);
+    res.json({ message: "Product updated", product: updatedProduct });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

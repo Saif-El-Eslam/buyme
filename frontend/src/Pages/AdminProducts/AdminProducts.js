@@ -98,7 +98,7 @@ function AdminProducts() {
                 className="admin-product-card"
                 key={product._id}
                 onClick={() => {
-                  navigate(`/admin/products/${product.id}/update`);
+                  navigate(`/admin/products/${product._id}/update`);
                 }}
               >
                 <div className="admin-product-img">

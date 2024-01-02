@@ -1,14 +1,32 @@
 import axios from "axios";
+import TokenService from "./AuthAPICalls";
 
 export const uploadImage = async (productId, formData) => {
   try {
     const response = await axios.put(
-      `http://127.0.0.1:5000/api/products/${productId}/add-image`,
+      `${process.env.REACT_APP_API_URL}/products/${productId}/add-image`,
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU4NDc2N2NiYzk1MTdjM2I5MzdiMzFmIiwiZW1haWwiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwNDAzNjMzNSwiZXhwIjoxNzA0MDc5NTM1fQ.h5peINyoNASdwEO5u79wjKdCCmoW6KLpOyhxY9HdwuA`,
+          Authorization: `Bearer ${TokenService.getToken()}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteImage = async (productId, images) => {
+  try {
+    const response = await axios.put(
+      `${process.env.REACT_APP_API_URL}/products/${productId}/remove-image`,
+      { images },
+      {
+        headers: {
+          Authorization: `Bearer ${TokenService.getToken()}`,
         },
       }
     );

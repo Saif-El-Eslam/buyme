@@ -63,10 +63,10 @@ export const createProduct = async (product) => {
   }
 };
 
-export const updateProduct = async (product) => {
+export const updateProduct = async (id, product) => {
   try {
     return await axios.put(
-      `${process.env.REACT_APP_API_URL}/products/${product.id}`,
+      `${process.env.REACT_APP_API_URL}/products/${id}`,
       product,
       {
         headers: {
