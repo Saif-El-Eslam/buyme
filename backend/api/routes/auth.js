@@ -73,7 +73,7 @@ router.post("/signup", async (req, res) => {
     .then((result) => {
       createCart({ user_id: result._id, products: [], total_price: 0 });
 
-      res.send(result);
+      res.send("User created successfully");
     })
     .catch((error) => {
       res.send(error.message).status(500);
@@ -110,7 +110,7 @@ router.post("/login", async (req, res) => {
       // add token to user
       updateUser(user._id, { token });
 
-      res.json({ token });
+      res.json({ token, role: user.role });
     });
   } catch (error) {
     res.send(error.message).status(500);

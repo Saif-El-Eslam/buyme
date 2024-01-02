@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import TokenService from "../../Services/AuthAPICalls";
 
 function Header() {
   const urlParts = window.location.href.split("/");
@@ -12,7 +13,9 @@ function Header() {
   // get the size of the screen
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [admin, setAdmin] = useState(true);
+
+  const loggedIn = TokenService.getToken() ? true : false;
+  const admin = TokenService.getRole() === "admin" ? true : false;
 
   useEffect(() => {
     // handle screen size
@@ -116,7 +119,9 @@ function Header() {
 
       {admin && (
         <div className="products-orders-wrapper">
-          {urlParts.includes("orders") && (
+          {(urlParts.includes("orders") ||
+            (!urlParts.includes("products") &&
+              !urlParts.includes("orders"))) && (
             <div
               className="products-wrapper"
               onClick={() => navigate("/admin/products")}
@@ -125,7 +130,9 @@ function Header() {
             </div>
           )}
 
-          {urlParts.includes("products") && (
+          {(urlParts.includes("products") ||
+            (!urlParts.includes("products") &&
+              !urlParts.includes("orders"))) && (
             <div
               className="orders-wrapper"
               onClick={() => navigate("/admin/orders")}
@@ -143,7 +150,7 @@ function Header() {
         <div
           className="icon"
           onClick={
-            () => (false ? navigate("/profile") : navigate("/profile/login")) // check if the user is logged in
+            () => (loggedIn ? navigate("/profile") : navigate("/profile/login")) // check if the user is logged in
           }
         >
           <img src="/profile.png" alt="user" />

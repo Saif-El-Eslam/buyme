@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import TokenService from "../../Services/AuthAPICalls";
 
 function Footer() {
   const navigate = useNavigate();
@@ -10,6 +11,9 @@ function Footer() {
   const [ourShopOpen, setOurShopOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [contactUsOpen, setContactUsOpen] = useState(false);
+
+  const loggedIn = TokenService.getToken() ? true : false;
+  const admin = TokenService.getRole() === "admin" ? true : false;
 
   useEffect(() => {
     // handle screen size
@@ -121,12 +125,46 @@ function Footer() {
           </div>
           {(screenWidth > 850 || accountOpen) && (
             <div className="content font-3">
-              <div className="item">My Account</div>
-              <div className="item">
-                Orders History{" "}
-                <span className="login-to-access">login to access</span>
+              <div
+                className="item"
+                onClick={() =>
+                  loggedIn ? navigate("/profile") : navigate("/profile/login")
+                }
+              >
+                My Account
               </div>
-              <div className="item">Cart</div>
+              <div
+                className="item"
+                onClick={() =>
+                  loggedIn
+                    ? admin
+                      ? navigate("/admin/orders")
+                      : navigate("/profile/orders")
+                    : navigate("/profile/login")
+                }
+              >
+                {admin ? "Orders" : "Orders History"}{" "}
+                {!loggedIn && (
+                  <span className="login-to-access">login to access</span>
+                )}
+              </div>
+              {!admin && (
+                <div className="item" onClick={() => navigate("/cart")}>
+                  Cart
+                </div>
+              )}
+
+              {loggedIn && (
+                <div
+                  className="item"
+                  onClick={() => {
+                    TokenService.removeToken();
+                    navigate("/");
+                  }}
+                >
+                  Logout
+                </div>
+              )}
             </div>
           )}
         </div>

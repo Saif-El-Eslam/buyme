@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/Footer";
 import "./ProfilePage.css";
+import TokenService from "../../Services/AuthAPICalls";
+import { getProfile } from "../../Services/profileAPICalls";
 
 function ProfilePage() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -16,26 +18,35 @@ function ProfilePage() {
   const [showInfo, setShowInfo] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
-
   const [user, setUser] = useState({
-    firstName: "Saifeleslam",
-    lastName: "Elsayed",
-    email: "saifeleslam@gmail.com",
-    phone: "01017318281",
-    address: {
-      street: "street",
-      city: "city",
-      governorate: "state",
-      country: "country",
-      notes: "notes",
-    },
-    payment_method: {
-      card_number: "card_number",
-      expiry_date: "expiry_date",
-      cvv: "cvv",
-      notes: "notes",
-    },
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    address: {},
+    payment_method: {},
   });
+
+  useEffect(() => {
+    // redirect to login if not logged in
+    if (!TokenService.getToken()) {
+      window.location.href = "/profile/login";
+    }
+
+    // get profile info
+    getProfile(TokenService.getToken()).then((response) => {
+      if (response.status === 200) {
+        setUser({
+          first_name: response.data.first_name || "",
+          last_name: response.data.last_name || "",
+          email: response.data.email || "",
+          phone: response.data.phone || "",
+          address: response.data.address || {},
+          payment_method: response.data.payment_method || {},
+        });
+      }
+    });
+  }, []);
 
   const handleUpdateInfo = () => {
     console.log(user);
@@ -83,24 +94,28 @@ function ProfilePage() {
               >
                 Info
               </div>
-              <div
-                className={
-                  "profile-tab" +
-                  (tab === "address" ? " profile-tab-selected" : "")
-                }
-                onClick={() => setTab("address")}
-              >
-                Address
-              </div>
-              <div
-                className={
-                  "profile-tab" +
-                  (tab === "payment" ? " profile-tab-selected" : "")
-                }
-                onClick={() => setTab("payment")}
-              >
-                Payment Info
-              </div>
+              {TokenService.getRole() !== "admin" && (
+                <div
+                  className={
+                    "profile-tab" +
+                    (tab === "address" ? " profile-tab-selected" : "")
+                  }
+                  onClick={() => setTab("address")}
+                >
+                  Address
+                </div>
+              )}
+              {TokenService.getRole() !== "admin" && (
+                <div
+                  className={
+                    "profile-tab" +
+                    (tab === "payment" ? " profile-tab-selected" : "")
+                  }
+                  onClick={() => setTab("payment")}
+                >
+                  Payment Info
+                </div>
+              )}
             </div>
           )}
 
@@ -130,9 +145,9 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="First Name"
-                            value={user.firstName}
+                            value={user.first_name}
                             onChange={(e) =>
-                              setUser({ ...user, firstName: e.target.value })
+                              setUser({ ...user, first_name: e.target.value })
                             }
                           />
                         </div>
@@ -140,9 +155,9 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="Last Name"
-                            value={user.lastName}
+                            value={user.last_name}
                             onChange={(e) =>
-                              setUser({ ...user, lastName: e.target.value })
+                              setUser({ ...user, last_name: e.target.value })
                             }
                           />
                         </div>

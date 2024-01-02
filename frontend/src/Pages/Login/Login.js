@@ -3,6 +3,8 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/Footer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../Services/AuthAPICalls";
+import TokenService from "../../Services/AuthAPICalls";
 
 function Login() {
   const navigate = useNavigate();
@@ -14,11 +16,20 @@ function Login() {
 
   // error for 3 seconds
   const handleSubmit = () => {
-    console.log(email, password);
-    setError("invalid email or password");
-    setTimeout(() => {
-      setError(false);
-    }, 3000);
+    login({ email, password }).then((response) => {
+      if (response.status === 200) {
+        TokenService.setToken(response.data.token);
+        TokenService.setRole(response.data.role);
+        response.data.role === "admin"
+          ? navigate("/admin/products")
+          : navigate("/");
+      } else {
+        setError(response);
+        setTimeout(() => {
+          setError(false);
+        }, 3000);
+      }
+    });
   };
 
   return (
