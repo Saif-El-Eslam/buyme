@@ -79,7 +79,8 @@ export const getProducts = async () => {
 export const getProductsByPage = async (n, m, fields) => {
   try {
     const products = await Product.find().limit(n).skip(m).select(fields);
-    return products;
+    const totalProducts = await Product.countDocuments();
+    return { products, totalProducts };
   } catch (error) {
     throw new Error(error.message);
   }

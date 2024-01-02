@@ -3,25 +3,73 @@ import Header from "../../components/Header/header";
 import PageNavigation from "../../components/PageNavigation/PageNavigation";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProductsByPage } from "../../Services/ProductsCalls";
+import { getProductsByPage, deleteProduct } from "../../Services/ProductsCalls";
+import InfoMessage from "../../components/Messages/InfoMessage";
 
 function AdminProducts() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+  const [deletFlag, setDeleteFlag] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getProductsByPage(pageNumber).then((res) => {
-      setProducts(res.data.products);
-      setTotalPages(res.data.pagesCount);
+      setProducts(res.data?.products);
+      setTotalPages(res.data?.pagesCount);
+      if (res.data?.pagesCount < pageNumber) {
+        setPageNumber(res.data.pagesCount);
+      }
+      setLoading(false);
     });
-  }, [pageNumber]);
+  }, [pageNumber, deletFlag]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onDeleteProduct = (id) => {
+    setLoading(true);
+    deleteProduct(id).then((res) => {
+      if (res.status === 200) {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+
+        setDeleteFlag(!deletFlag);
+      } else {
+        setInfoMessage(res);
+        setInfoMessageType("error");
+
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
+  };
 
   return (
     <div className="admin-products">
       <Header />
       <div className="admin-products-wrapper">
+        {infomessage && (
+          <InfoMessage
+            message={infomessage}
+            setMessage={setInfoMessage}
+            type={infoMessageType}
+          />
+        )}
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="admin-products-header">
           <div className="admin-products-title">All Products</div>
           <div
@@ -44,7 +92,7 @@ function AdminProducts() {
             </div>
           </div>
 
-          {products.map((product) => {
+          {products?.map((product) => {
             return (
               <div
                 className="admin-product-card"
@@ -71,7 +119,7 @@ function AdminProducts() {
                     className="admin-product-delete"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("delete");
+                      onDeleteProduct(product._id);
                     }}
                   >
                     <img src="http://localhost:3001/delete.png" alt="delete" />

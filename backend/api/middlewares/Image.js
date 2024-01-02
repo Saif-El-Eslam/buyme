@@ -40,17 +40,22 @@ export const uploadToCloudinary = async (req, res, next) => {
 
 export const deleteFromCloudinary = async (req, res, next) => {
   try {
-    const { image } = req.body;
+    const { images } = req.body;
 
-    const urlParts = image.split("/");
-    const folderName = urlParts[urlParts.length - 2];
-    const publicId = urlParts[urlParts.length - 1].split(".")[0];
+    if (!images || images.length === 0) {
+      req.body.deleteResponse = { result: "image empty" };
+      return next();
+    }
 
-    const response = await cloudinary.uploader.destroy(
-      `${folderName}/${publicId}`
-    );
+    images.forEach(async (image) => {
+      const urlParts = image.split("/");
+      const folderName = urlParts[urlParts.length - 2];
+      const publicId = urlParts[urlParts.length - 1].split(".")[0];
 
-    req.body.deleteResponse = response;
+      const response = await cloudinary.uploader.destroy(
+        `${folderName}/${publicId}`
+      );
+    });
 
     next();
   } catch (error) {

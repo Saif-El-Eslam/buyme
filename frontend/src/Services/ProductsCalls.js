@@ -62,3 +62,34 @@ export const createProduct = async (product) => {
     return error.response.data.message;
   }
 };
+
+export const updateProduct = async (product) => {
+  try {
+    return await axios.put(
+      `${process.env.REACT_APP_API_URL}/products/${product.id}`,
+      product,
+      {
+        headers: {
+          Authorization: `Bearer ${TokenService.getToken()}`,
+        },
+      }
+    );
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const deleteProduct = async (id) => {
+  try {
+    return await axios.delete(
+      `${process.env.REACT_APP_API_URL}/products/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TokenService.getToken()}`,
+        },
+      }
+    );
+  } catch (error) {
+    return error.response.data.message;
+  }
+};

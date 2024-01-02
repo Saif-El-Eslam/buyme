@@ -39,9 +39,13 @@ router.get("/skip/:pagesCount/take/:ordersCount", async (req, res) => {
     const ordersCount = parseInt(req.params.ordersCount) || 10;
     const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
 
-    const products = await getProductsByPage(ordersCount, pageNum, fields);
+    const { products, totalProducts } = await getProductsByPage(
+      ordersCount,
+      pageNum,
+      fields
+    );
 
-    const pagesCount = Math.ceil(products.length / req.params.ordersCount);
+    const pagesCount = Math.ceil(totalProducts / ordersCount);
 
     res.json({ pagesCount, products });
   } catch (error) {
@@ -156,7 +160,6 @@ router.put(
         }
       });
 
-      console.log(images);
       const updatedProduct = await updateProduct(req.params.id, { images });
       res.json(updatedProduct.images);
     } catch (error) {
@@ -180,24 +183,25 @@ router.put("/:id/remove-image", verifyToken, async (req, res) => {
     }
 
     const images = product.images;
-    const index = images.indexOf(req.body.image);
-    if (index === -1) {
-      return res.status(404).json({ message: "Image not found" });
-    }
+    const reqImages = req.body.images;
+
+    reqImages.forEach((image, i) => {
+      const index = images.indexOf(image);
+      if (index === -1) {
+        // return res.status(404).json({ message: `Image no. ${i} not found` });
+        // raise error to stop runing
+        const error = new Error(`Image no. ${i + 1} not found`);
+        error.status = 404;
+        throw error;
+      }
+    });
 
     await deleteFromCloudinary(req, res, () => {
-      if (req.body.deleteResponse.result !== "ok") {
-        if (req.body.deleteResponse.result === "not found") {
-          return res
-            .status(404)
-            .json({ message: "Image not found in the cloud" });
-        }
-        return res.status(500).json({ message: "Error deleting image" });
-      } else {
-        images.splice(index, 1);
-        updateProduct(req.params.id, { images });
-        res.json(images);
-      }
+      const images = product.images.filter(
+        (image) => !reqImages.includes(image)
+      );
+      updateProduct(req.params.id, { images });
+      res.json(images);
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -213,8 +217,17 @@ router.delete("/:id", verifyToken, async (req, res) => {
       });
     }
 
-    const deletedProduct = await deleteProduct(req.params.id);
-    res.json(deletedProduct);
+    // get product
+    const product = await getProductById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    req.body.images = product.images;
+
+    await deleteFromCloudinary(req, res, async () => {
+      await deleteProduct(req.params.id);
+      res.json({ message: "Product deleted" });
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
