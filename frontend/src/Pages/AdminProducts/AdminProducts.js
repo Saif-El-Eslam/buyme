@@ -1,63 +1,22 @@
 import "./AdminProducts.css";
 import Header from "../../components/Header/header";
 import PageNavigation from "../../components/PageNavigation/PageNavigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProductsByPage } from "../../Services/ProductsCalls";
 
 function AdminProducts() {
   const navigate = useNavigate();
   const [pageNumber, setPageNumber] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const products = [
-    {
-      id: "658584e4893a4ca4e879b2e2",
-      category: "T-shirt",
-      productName: "Cotton T-shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/t-shirt.jpg",
-      quantity: 10,
-    },
-    {
-      id: 2,
-      category: "shirt",
-      productName: "Green Cotton shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shirt.jpg",
-      quantity: 0,
-    },
-    {
-      id: 3,
-      category: "Shorts",
-      productName: "Blue Jeens Cargo Shorts",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shorts.jpg",
-      quantity: 10,
-    },
-    {
-      id: 4,
-      category: "Pants",
-      productName: "Olive Cargo Pants",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/pants.jpg",
-      quantity: 10,
-    },
-    {
-      id: 5,
-      category: "Jacket",
-      productName: "Black Bomber Jacket",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/jacket.jpg",
-      quantity: 10,
-    },
-    {
-      id: 6,
-      category: "Hoodie",
-      productName: "Green Cotton Hoodie",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/hoodie.jpg",
-      quantity: 5,
-    },
-  ];
+  useEffect(() => {
+    getProductsByPage(pageNumber).then((res) => {
+      setProducts(res.data.products);
+      setTotalPages(res.data.pagesCount);
+    });
+  }, [pageNumber]);
 
   return (
     <div className="admin-products">
@@ -89,18 +48,16 @@ function AdminProducts() {
             return (
               <div
                 className="admin-product-card"
-                key={product.id}
+                key={product._id}
                 onClick={() => {
                   navigate(`/admin/products/${product.id}/update`);
                 }}
               >
                 <div className="admin-product-img">
-                  <img src={product.imgURL} alt={product.productName} />
+                  <img src={product.images[0]} alt={product.title} />
                 </div>
 
-                <div className="admin-product-name font-4">
-                  {product.productName}
-                </div>
+                <div className="admin-product-name font-4">{product.title}</div>
                 <div className="admin-product-category">{product.category}</div>
                 <div className="admin-product-price">${product.price}</div>
                 <div className="admin-product-status">
@@ -129,7 +86,7 @@ function AdminProducts() {
           <PageNavigation
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
-            totalPages={10}
+            totalPages={totalPages}
           />
         </div>
       </div>

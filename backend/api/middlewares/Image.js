@@ -11,12 +11,14 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const myUploadMiddleware = upload.array("file");
-
 export const uploadToCloudinary = async (req, res, next) => {
   try {
     myUploadMiddleware(req, res, async () => {
       const urls = [];
       const files = req.files;
+      if (!files) {
+        return res.status(400).json({ message: "No files were uploaded" });
+      }
 
       for (const file of files) {
         const b64 = Buffer.from(file.buffer).toString("base64");

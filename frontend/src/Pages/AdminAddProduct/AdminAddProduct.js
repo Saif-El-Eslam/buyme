@@ -1,14 +1,18 @@
 import "./AdminAddProduct.css";
 import Header from "../../components/Header/header";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import ProductForm from "../../components/ProductForm/ProductForm";
 import { useNavigate } from "react-router-dom";
+import InfoMessage from "../../components/Messages/InfoMessage";
+import { createProduct } from "../../Services/ProductsCalls";
 
 function AdminAddProduct() {
   const navigate = useNavigate();
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+  const [loading, setLoading] = useState(false);
+
   const [product, setProduct] = useState({
-    id: useParams().id,
     title: "",
     price: 0,
     category: "",
@@ -24,11 +28,60 @@ function AdminAddProduct() {
     ],
   });
 
+  const OnAddProduct = () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("title", product.title);
+    formData.append("price", product.price);
+    formData.append("category", product.category);
+    formData.append("description", product.description);
+    formData.append("quantity", product.quantity);
+    formData.append("sizes", JSON.stringify(product.sizes));
+    product.images.forEach((image) => {
+      formData.append(`file`, image);
+    });
+
+    createProduct(formData).then((res) => {
+      setLoading(false);
+      if (res.status === 201) {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+          // navigate("/admin/products");
+        }, 3000);
+      } else {
+        setInfoMessage(res);
+        setInfoMessageType("error");
+
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+    });
+  };
+
   return (
     <div className="admin-add-product">
       <Header />
 
       <div className="admin-add-product-wrapper">
+        {infomessage && (
+          <InfoMessage
+            message={infomessage}
+            setMessage={setInfoMessage}
+            type={infoMessageType}
+          />
+        )}
+
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="admin-add-product-products-link-wrapper">
           <div
             className="admin-add-product-products-link"
@@ -43,7 +96,11 @@ function AdminAddProduct() {
         </div>
 
         <div className="admin-add-product-form-wrapper">
-          <ProductForm product={product} setProduct={setProduct} />
+          <ProductForm
+            product={product}
+            setProduct={setProduct}
+            onAction={OnAddProduct}
+          />
         </div>
       </div>
     </div>

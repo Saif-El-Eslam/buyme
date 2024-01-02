@@ -3,6 +3,7 @@ import "./Footer.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import TokenService from "../../Services/AuthAPICalls";
+import { logout } from "../../Services/AuthAPICalls";
 
 function Footer() {
   const navigate = useNavigate();
@@ -158,8 +159,13 @@ function Footer() {
                 <div
                   className="item"
                   onClick={() => {
-                    TokenService.removeToken();
-                    navigate("/");
+                    logout().then((res) => {
+                      if (res.status === 200) {
+                        TokenService.removeToken();
+                        TokenService.removeRole();
+                        navigate("/");
+                      }
+                    });
                   }}
                 >
                   Logout

@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import React, { useCallback, useEffect, useState } from "react";
 import { uploadImage } from "../../Services/ImagesAPICalls";
 
-function ProductForm({ product, setProduct }) {
+function ProductForm({ product, setProduct, onAction }) {
   const [createProduct, setCreateProduct] = useState(product.id ? false : true);
 
   const [newImages, setNewImages] = useState([]);
@@ -47,6 +47,10 @@ function ProductForm({ product, setProduct }) {
 
   useEffect(() => {
     setAllImages([...oldImages, ...newImages]);
+
+    if (createProduct) {
+      setProduct({ ...product, images: [...oldImages, ...newImages] });
+    }
   }, [newImages, oldImages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteImage = (image) => {
@@ -61,10 +65,6 @@ function ProductForm({ product, setProduct }) {
 
   const HandleUpdateProductInfo = () => {
     console.log("update product info");
-  };
-
-  const HandleCreateProduct = () => {
-    console.log("create product");
   };
 
   return (
@@ -110,12 +110,12 @@ function ProductForm({ product, setProduct }) {
             <div className="admin-edit-product-field-wrapper">
               <Selector
                 options={[
-                  { value: "T-Shirts", label: "T-Shirts" },
-                  { value: "Shirts", label: "Shirts" },
-                  { value: "Pants", label: "Pants" },
-                  { value: "Shorts", label: "Shorts" },
-                  { value: "Jackets", label: "Jackets" },
-                  { value: "Shoes", label: "Shoes" },
+                  { value: "T-shirts", label: "T-shirts" },
+                  { value: "shirts", label: "shirts" },
+                  { value: "pants", label: "pants" },
+                  { value: "shorts", label: "shorts" },
+                  { value: "jackets", label: "jackets" },
+                  { value: "hoodies", label: "hoodies" },
                 ]}
                 selectedOption={{
                   value: product.category,
@@ -265,7 +265,7 @@ function ProductForm({ product, setProduct }) {
           {createProduct && (
             <div
               className="button-wrapper admin-edit-product-image-upload"
-              onClick={HandleCreateProduct}
+              onClick={onAction}
             >
               <div className="button-green font-2">Create Product</div>
             </div>

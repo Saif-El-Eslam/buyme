@@ -45,7 +45,7 @@ function Signup() {
       <Header />
 
       <div className="signup-content">
-        {infomessage && <InfoMessage message={infomessage} />}
+        {infomessage && <InfoMessage message={infomessage} type={"info"} />}
 
         <div className="signup-wrapper">
           <div className="signup-title font-0">

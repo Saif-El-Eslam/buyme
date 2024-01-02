@@ -12,7 +12,6 @@ const productSchema = mongoose.Schema(
     },
     price: {
       type: Number,
-      enum: ["S", "M", "L", "XL", "XXL"],
       required: "Price is required",
     },
     category: {
@@ -29,6 +28,7 @@ const productSchema = mongoose.Schema(
         {
           size: {
             type: String,
+            enum: ["S", "M", "L", "XL", "XXL"],
             required: "Size is required",
           },
           quantity: {
@@ -68,7 +68,7 @@ export const createProduct = async (product) => {
 // get all products
 export const getProducts = async () => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().select(fields);
     return products;
   } catch (error) {
     throw new Error(error.message);
@@ -76,9 +76,9 @@ export const getProducts = async () => {
 };
 
 // get n products after skipping m products
-export const getProductsByPage = async (n, m) => {
+export const getProductsByPage = async (n, m, fields) => {
   try {
-    const products = await Product.find().limit(n).skip(m);
+    const products = await Product.find().limit(n).skip(m).select(fields);
     return products;
   } catch (error) {
     throw new Error(error.message);

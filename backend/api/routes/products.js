@@ -1,6 +1,7 @@
 // path: /api/products
 import express from "express";
 import dotenv from "dotenv";
+import multer from "multer";
 dotenv.config();
 
 import {
@@ -22,7 +23,8 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const products = await getProducts();
+    const fields = ["id", "title", "price", "category", "images", "quantity"];
+    const products = await getProducts(fields);
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -32,10 +34,12 @@ router.get("/", async (req, res) => {
 // get n products after skipping m products
 router.get("/skip/:pagesCount/take/:ordersCount", async (req, res) => {
   try {
-    const products = await getProductsByPage(
-      req.params.ordersCount,
-      req.params.pagesCount * req.params.ordersCount
-    );
+    const fields = ["id", "title", "price", "category", "images", "quantity"];
+
+    const ordersCount = parseInt(req.params.ordersCount) || 10;
+    const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
+
+    const products = await getProductsByPage(ordersCount, pageNum, fields);
 
     const pagesCount = Math.ceil(products.length / req.params.ordersCount);
 
@@ -69,10 +73,11 @@ router.get("/category/:category", async (req, res) => {
   }
 });
 
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", verifyToken, uploadToCloudinary, async (req, res) => {
   try {
-    const { title, description, price, category, images, sizes } = req.body;
-    if (!title || !price || !category || !images) {
+    const { title, description, price, category, sizes } = req.body;
+
+    if (!title || !price || !category) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -83,7 +88,14 @@ router.post("/", verifyToken, async (req, res) => {
       });
     }
 
-    const quantity = sizes.reduce((sum, curr) => sum + curr.quantity, 0);
+    // convert sizes to json
+    const Jsonsizes = JSON.parse(req.body.sizes);
+    const quantity = Jsonsizes.reduce(
+      (sum, curr) => sum + parseFloat(curr.quantity),
+      0
+    );
+
+    const images = req.body.images;
 
     const product = {
       title,
@@ -92,11 +104,11 @@ router.post("/", verifyToken, async (req, res) => {
       category,
       images,
       quantity,
-      sizes,
+      sizes: Jsonsizes,
     };
 
     const newProduct = await createProduct(product);
-    res.status(201).json(newProduct);
+    res.status(201).json({ message: "Product created", product: newProduct });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

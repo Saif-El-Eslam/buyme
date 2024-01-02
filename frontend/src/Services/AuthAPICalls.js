@@ -23,6 +23,22 @@ export const login = async (user) => {
   }
 };
 
+export const logout = async () => {
+  try {
+    return await axios.post(
+      `${process.env.REACT_APP_API_URL}/auth/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${TokenService.getToken()}`,
+        },
+      }
+    );
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
 //////////////////////////////////////////////
 const TOKEN_KEY = process.env.REACT_APP_TOKEN_KEY;
 

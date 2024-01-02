@@ -2,24 +2,39 @@
   position: fixed;
 
   width: 100%;
-  top: 50px;
+  top: 150px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  cursor: pointer;
 
   z-index: 100;
 }
 
 .alert-wrapper {
   border-radius: 5px;
-  padding: 2rem;
-  background-color: rgb(241, 241, 241);
+  padding: 1rem 2rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  background-color: #f8f8f8;
+  border: 1px solid #e6e6e6;
+  color: #333;
+}
+
+.alert-info {
+  background-color: #007c00;
+  color: #fff;
+}
+
+.alert-error {
+  background-color: #d80e0e;
+  color: #fff;
 }
 
 .alert-button-wrapper {
