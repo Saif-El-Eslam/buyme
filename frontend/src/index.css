@@ -154,11 +154,14 @@ code {
 .loader-wrapper {
   position: fixed;
   top: 150px;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50vh;
-  width: 100%;
+  width: 100vw;
+
+  z-index: 100;
 }
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */

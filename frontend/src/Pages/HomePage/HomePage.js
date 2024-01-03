@@ -5,48 +5,14 @@ import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getNProductsPerCategory } from "../../Services/ProductsCalls";
 
 function HomePage() {
   const navigate = useNavigate();
 
-  const [productsHome, setProductsHome] = useState([
-    {
-      category: "T-shirt",
-      productName: "Cotton T-shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/t-shirt.jpg",
-    },
-    {
-      category: "shirt",
-      productName: "Green Cotton shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shirt.jpg",
-    },
-    {
-      category: "Shorts",
-      productName: "Blue Jeens Cargo Shorts",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shorts.jpg",
-    },
-    {
-      category: "Pants",
-      productName: "Olive Cargo Pants",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/pants.jpg",
-    },
-    {
-      category: "Jacket",
-      productName: "Black Bomber Jacket",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/jacket.jpg",
-    },
-    {
-      category: "Hoodie",
-      productName: "Green Cotton Hoodie",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/hoodie.jpg",
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
+
+  const [productsHome, setProductsHome] = useState();
 
   //  swipe the products every 3 seconds
   const swipeProductsByOne = (direction) => {
@@ -63,11 +29,25 @@ function HomePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLoading(true);
+
+    getNProductsPerCategory(1).then((res) => {
+      if (res.status === 200) {
+        setProductsHome(res.data);
+      }
+      setLoading(false);
+    });
   }, []);
   return (
     <div className="home-page">
       <Header />
       <div className="home-page-content">
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="section-1">
           <div className="section-1-wrapper">
             <div className="section-1-wrapper-title font-2">
@@ -103,35 +83,35 @@ function HomePage() {
               </div>
               <div className="category-card-wrapper">
                 <CategoryCard
-                  category={"Shirts"}
+                  category={"shirts"}
                   imgURL={"http://localhost:3001/categories/shirt.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
-                  category={"Pants"}
+                  category={"pants"}
                   imgURL={"http://localhost:3001/categories/pants.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
-                  category={"Shorts"}
+                  category={"shorts"}
                   imgURL={"http://localhost:3001/categories/shorts.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
-                  category={"Jackets"}
+                  category={"jackets"}
                   imgURL={"http://localhost:3001/categories/jacket.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
-                  category={"Hoodies"}
+                  category={"hoodies"}
                   imgURL={"http://localhost:3001/categories/hoodie.jpg"}
                 />
               </div>
@@ -172,7 +152,7 @@ function HomePage() {
               </div>
 
               <div className="section-3-wrapper-items-cards">
-                {productsHome.map((product, i) => (
+                {productsHome?.map((product, i) => (
                   <div key={i} className="product-card-wrapper">
                     <ProductCard product={product} />
                   </div>

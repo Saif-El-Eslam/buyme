@@ -78,37 +78,55 @@ function Header() {
             <div className="categories" ref={categoriesRef}>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/t-shirts")}
+                onClick={() => {
+                  navigate("/products/category/T-shirts");
+                  window.location.reload();
+                }}
               >
                 T-shirts
               </div>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/shirts")}
+                onClick={() => {
+                  navigate("/products/category/shirts");
+                  window.location.reload();
+                }}
               >
                 Shirts
               </div>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/pants")}
+                onClick={() => {
+                  navigate("/products/category/pants");
+                  window.location.reload();
+                }}
               >
                 Pants
               </div>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/shorts")}
+                onClick={() => {
+                  navigate("/products/category/shorts");
+                  window.location.reload();
+                }}
               >
                 Shorts
               </div>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/jackets")}
+                onClick={() => {
+                  navigate("/products/category/jackets");
+                  window.location.reload();
+                }}
               >
                 Jackets
               </div>
               <div
                 className="category"
-                onClick={() => navigate("/products/category/hoodies")}
+                onClick={() => {
+                  navigate("/products/category/hoodies");
+                  window.location.reload();
+                }}
               >
                 Hoodies
               </div>

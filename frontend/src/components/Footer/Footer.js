@@ -66,37 +66,55 @@ function Footer() {
             <div className="content font-3">
               <div
                 className="item"
-                onClick={() => navigate("/products/category/t-shirts")}
+                onClick={() => {
+                  navigate("/products/category/T-shirts");
+                  window.location.reload();
+                }}
               >
                 T-shirts
               </div>
               <div
                 className="item"
-                onClick={() => navigate("/products/category/shirts")}
+                onClick={() => {
+                  navigate("/products/category/shirts");
+                  window.location.reload();
+                }}
               >
                 Shirts
               </div>
               <div
                 className="item"
-                onClick={() => navigate("/products/category/pants")}
+                onClick={() => {
+                  navigate("/products/category/pants");
+                  window.location.reload();
+                }}
               >
                 Pants
               </div>
               <div
                 className="item"
-                onClick={() => navigate("/products/category/shorts")}
+                onClick={() => {
+                  navigate("/products/category/shorts");
+                  window.location.reload();
+                }}
               >
-                horts
+                Shorts
               </div>
               <div
                 className="item"
-                onClick={() => navigate("/products/category/jackets")}
+                onClick={() => {
+                  navigate("/products/category/jackets");
+                  window.location.reload();
+                }}
               >
                 Jackets
               </div>
               <div
                 className="item"
-                onClick={() => navigate("/products/category/hoodies")}
+                onClick={() => {
+                  navigate("/products/category/hoodies");
+                  window.location.reload();
+                }}
               >
                 Hoodies
               </div>
@@ -160,7 +178,7 @@ function Footer() {
                   className="item"
                   onClick={() => {
                     logout().then((res) => {
-                      if (res.status === 200) {
+                      if (res.status === 200 || res.status === 401) {
                         TokenService.removeToken();
                         TokenService.removeRole();
                         navigate("/");

@@ -5,62 +5,41 @@ import Filter from "../../components/Filter/Filter";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import PageNavigation from "../../components/PageNavigation/PageNavigation";
 import "./ProductsPage.css";
+import { getProductsByPage } from "../../Services/ProductsCalls";
 
 function ProductsPage() {
   const [pageNumber, setPageNumber] = useState(1);
-  const products = [
-    {
-      id: 1,
-      category: "T-shirt",
-      productName: "Cotton T-shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/t-shirt.jpg",
-    },
-    {
-      id: 2,
-      category: "shirt",
-      productName: "Green Cotton shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shirt.jpg",
-    },
-    {
-      id: 3,
-      category: "Shorts",
-      productName: "Blue Jeens Cargo Shorts",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shorts.jpg",
-    },
-    {
-      id: 4,
-      category: "Pants",
-      productName: "Olive Cargo Pants",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/pants.jpg",
-    },
-    {
-      id: 5,
-      category: "Jacket",
-      productName: "Black Bomber Jacket",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/jacket.jpg",
-    },
-    {
-      id: 6,
-      category: "Hoodie",
-      productName: "Green Cotton Hoodie",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/hoodie.jpg",
-    },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    getProductsByPage(pageNumber).then((res) => {
+      setProducts(res.data?.products);
+      setTotalPages(res.data?.pagesCount);
+      if (res.data?.pagesCount < pageNumber) {
+        setPageNumber(res.data.pagesCount);
+      }
+      setLoading(false);
+    });
+  }, [pageNumber]);
+
   return (
     <div className="products-page">
       <Header />
       <div className="products-page-content">
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="title-section font-0">
           <h1>All Products</h1>
         </div>
@@ -71,7 +50,7 @@ function ProductsPage() {
 
         <div className="products-section">
           <div className="products-page-products-wrapper">
-            {products.map((product, index) => {
+            {products?.map((product, index) => {
               return (
                 <div className="products-page-product-card-wrapper" key={index}>
                   <ProductCard product={product} />
@@ -84,7 +63,7 @@ function ProductsPage() {
             <PageNavigation
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
-              totalPages={10}
+              totalPages={totalPages}
             />
           </div>
         </div>

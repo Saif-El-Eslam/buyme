@@ -11,9 +11,13 @@ export const getProductsByPage = async (pageNum) => {
   }
 };
 
-export const getProducts = async () => {
+export const getProductsByPageByCategory = async (pageNum, category) => {
   try {
-    return await axios.get(`${process.env.REACT_APP_API_URL}/products`);
+    return await axios.get(
+      `${process.env.REACT_APP_API_URL}/products/category/${category}/skip/${
+        pageNum - 1
+      }/take/10`
+    );
   } catch (error) {
     return error.response.data.message;
   }
@@ -27,20 +31,10 @@ export const getProductById = async (id) => {
   }
 };
 
-export const getProductsByCategory = async (category) => {
+export const getNProductsPerCategory = async (limit) => {
   try {
     return await axios.get(
-      `${process.env.REACT_APP_API_URL}/products/category/${category}`
-    );
-  } catch (error) {
-    return error.response.data.message;
-  }
-};
-
-export const getProductBySizeAndId = async (id, size) => {
-  try {
-    return await axios.get(
-      `${process.env.REACT_APP_API_URL}/products/${id}/${size}`
+      `${process.env.REACT_APP_API_URL}/products/get-n-per-category/${limit}`
     );
   } catch (error) {
     return error.response.data.message;

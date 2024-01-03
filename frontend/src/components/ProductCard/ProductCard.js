@@ -3,7 +3,8 @@ import "./ProductCard.css";
 import { useNavigate } from "react-router-dom";
 
 function ProductCard({
-  product: { category, productName, price, imgURL, id },
+  // product: { category, productName, price, imgURL, id },
+  product: { category, title, price, images, _id },
 }) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
@@ -15,7 +16,7 @@ function ProductCard({
       onMouseLeave={() => setHovered(false)}
     >
       <div className="product-card-image">
-        <img src={imgURL} alt={`product->${category}`} />
+        <img src={images[0]} alt={`product->${category}`} />
 
         {hovered && (
           <div className="product-card-image-buttons">
@@ -27,7 +28,7 @@ function ProductCard({
 
             <div
               className="button-wrapper font-5"
-              onClick={() => navigate(`/products/${id}`)}
+              onClick={() => navigate(`/products/${_id}`)}
             >
               <div className="button-border-green-product-card">View</div>
             </div>
@@ -38,7 +39,7 @@ function ProductCard({
         <div className="product-card-left-content font-3">
           <div className="product-card-left-content-category"> {category} </div>
           <div className="product-card-left-content-product-name font-4">
-            {productName}
+            {title}
           </div>
         </div>
         <div className="product-card-right-content font-3"> ${price} </div>

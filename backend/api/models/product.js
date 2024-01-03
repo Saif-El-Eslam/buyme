@@ -66,7 +66,7 @@ export const createProduct = async (product) => {
 };
 
 // get all products
-export const getProducts = async () => {
+export const getProducts = async (fields) => {
   try {
     const products = await Product.find().select(fields);
     return products;
@@ -86,6 +86,21 @@ export const getProductsByPage = async (n, m, fields) => {
   }
 };
 
+// get n products after skipping m products by category
+export const getProductsByPageByCategory = async (n, m, category, fields) => {
+  try {
+    const products = await Product.find({ category })
+      .limit(n)
+      .skip(m)
+      .select(fields);
+    const totalProducts = await Product.countDocuments({ category });
+
+    return { products, totalProducts };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 // get an product by id
 export const getProductById = async (id) => {
   try {
@@ -97,9 +112,11 @@ export const getProductById = async (id) => {
 };
 
 // get products by category
-export const getProductsByCategory = async (category) => {
+export const getProductsByCategory = async (category, limit, fields) => {
   try {
-    const products = await Product.find({ category });
+    const products = await Product.find({ category })
+      .limit(limit)
+      .select(fields);
     return products;
   } catch (error) {
     throw new Error(error.message);

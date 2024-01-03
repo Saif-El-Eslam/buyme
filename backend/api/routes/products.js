@@ -12,6 +12,7 @@ import {
   updateProduct,
   deleteProduct,
   getProductsByPage,
+  getProductsByPageByCategory,
 } from "../models/product.js";
 import { verifyToken } from "../middlewares/token.js";
 import {
@@ -47,7 +48,7 @@ router.get("/skip/:pagesCount/take/:ordersCount", async (req, res) => {
 
     const pagesCount = Math.ceil(totalProducts / ordersCount);
 
-    res.json({ pagesCount, products });
+    res.json({ totalProducts, pagesCount, products });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -69,8 +70,64 @@ router.get("/:id", async (req, res) => {
 
 router.get("/category/:category", async (req, res) => {
   try {
-    console.log(req.params.category);
-    const products = await getProductsByCategory(req.params.category);
+    const fields = ["id", "title", "price", "category", "images", "quantity"];
+
+    const products = await getProductsByCategory(
+      req.params.category,
+      0,
+      fields
+    );
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get(
+  "/category/:category/skip/:pagesCount/take/:ordersCount",
+  async (req, res) => {
+    try {
+      const fields = ["id", "title", "price", "category", "images", "quantity"];
+
+      const ordersCount = parseInt(req.params.ordersCount) || 10;
+      const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
+
+      const { products, totalProducts } = await getProductsByPageByCategory(
+        ordersCount,
+        pageNum,
+        req.params.category,
+        fields
+      );
+
+      const pagesCount = Math.ceil(totalProducts / ordersCount);
+
+      res.json({ totalProducts, pagesCount, products });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+router.get("/get-n-per-category/:n", async (req, res) => {
+  try {
+    const fields = ["id", "title", "price", "category", "images", "quantity"];
+
+    const categories = [
+      "T-shirts",
+      "shirts",
+      "pants",
+      "shorts",
+      "jackets",
+      "hoodies",
+    ];
+
+    const products = await Promise.all(
+      categories.map(async (category) => {
+        const product = await getProductsByCategory(category, 1, fields);
+        return product[0];
+      })
+    );
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });

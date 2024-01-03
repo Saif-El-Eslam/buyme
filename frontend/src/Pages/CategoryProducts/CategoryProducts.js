@@ -6,64 +6,43 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import PageNavigation from "../../components/PageNavigation/PageNavigation";
 import "./CategoryProducts.css";
 import { useParams } from "react-router-dom";
+import { getProductsByPageByCategory } from "../../Services/ProductsCalls";
 
 function CategoryProducts() {
   const { category } = useParams();
 
   const [pageNumber, setPageNumber] = useState(1);
-  const categoryProducts = [
-    {
-      id: 1,
-      category: "T-shirt",
-      productName: "Cotton T-shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/t-shirt.jpg",
-    },
-    {
-      id: 2,
-      category: "shirt",
-      productName: "Green Cotton shirt",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shirt.jpg",
-    },
-    {
-      id: 3,
-      category: "Shorts",
-      productName: "Blue Jeens Cargo Shorts",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/shorts.jpg",
-    },
-    {
-      id: 4,
-      category: "Pants",
-      productName: "Olive Cargo Pants",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/pants.jpg",
-    },
-    {
-      id: 5,
-      category: "Jacket",
-      productName: "Black Bomber Jacket",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/jacket.jpg",
-    },
-    {
-      id: 6,
-      category: "Hoodie",
-      productName: "Green Cotton Hoodie",
-      price: 20,
-      imgURL: "http://localhost:3001/categories/hoodie.jpg",
-    },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [categoryProducts, setCategoryProducts] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    getProductsByPageByCategory(pageNumber, category).then((res) => {
+      setCategoryProducts(res.data?.products);
+      setTotalPages(res.data?.pagesCount);
+      if (res.data?.pagesCount < pageNumber) {
+        setPageNumber(res.data.pagesCount);
+      }
+      setLoading(false);
+    });
+  }, [pageNumber]);
+
   return (
     <div className="category-products-page">
       <Header />
       <div className="category-products-page-content">
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="title-section font-0">
           <h1>{category.toLocaleUpperCase()}</h1>
         </div>
@@ -74,7 +53,7 @@ function CategoryProducts() {
 
         <div className="category-products-section">
           <div className="category-products-page-products-wrapper">
-            {categoryProducts.map((product, index) => {
+            {categoryProducts?.map((product, index) => {
               return (
                 <div
                   className="category-products-page-product-card-wrapper"
@@ -90,7 +69,7 @@ function CategoryProducts() {
             <PageNavigation
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
-              totalPages={10}
+              totalPages={totalPages}
             />
           </div>
         </div>
