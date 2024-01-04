@@ -31,7 +31,7 @@ function CategoryProducts() {
       }
       setLoading(false);
     });
-  }, [pageNumber]);
+  }, [pageNumber]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="category-products-page">

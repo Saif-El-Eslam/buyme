@@ -81,7 +81,7 @@ router.put("/add-product", verifyToken, async (req, res) => {
 
     const result = await updateCart(cart._id, cart);
 
-    res.json(result);
+    res.json({ message: "Added to Cart", cart: result });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

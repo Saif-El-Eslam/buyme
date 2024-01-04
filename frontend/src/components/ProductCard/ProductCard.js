@@ -14,17 +14,18 @@ function ProductCard({
       className="product-card"
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={() => navigate(`/products/${_id}`)}
     >
       <div className="product-card-image">
         <img src={images[0]} alt={`product->${category}`} />
 
         {hovered && (
           <div className="product-card-image-buttons">
-            <div className="button-wrapper font-5">
+            {/* <div className="button-wrapper font-5">
               <div className="button-border-green-product-card">
                 Add To Card
               </div>
-            </div>
+            </div> */}
 
             <div
               className="button-wrapper font-5"
