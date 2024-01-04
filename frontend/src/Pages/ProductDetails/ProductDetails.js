@@ -24,6 +24,8 @@ function ProductDetails() {
 
   const [product, setProduct] = useState({});
 
+  console.log(product);
+
   useEffect(() => {
     setLoading(true);
     getProductById(id).then((res) => {
@@ -146,15 +148,15 @@ function ProductDetails() {
         <div className="product-details-right">
           <div className="product-details-right-section">
             <div className="product-details-right-title font-4">
-              {product.title}
+              {product?.title}
             </div>
 
             <div className="product-details-right-category font-5">
-              {product.category}
+              {product?.category}
             </div>
 
             <div className="product-details-right-price font-5">
-              ${product.price}
+              ${product?.price}
             </div>
           </div>
 
@@ -233,7 +235,7 @@ function ProductDetails() {
                   </div>
                   <div
                     className={
-                      selectedQuantity < selectedSize.quantity || !selectedSize
+                      selectedQuantity < selectedSize?.quantity || !selectedSize
                         ? "product-details-right-quantity-plus font-3"
                         : "product-details-right-quantity-plus-disabled font-3"
                     }
@@ -248,9 +250,9 @@ function ProductDetails() {
                 </div>
 
                 <div className="product-details-right-quantity-available font-3">
-                  {product.quantity} all products
+                  {product?.quantity} all products
                   <br />
-                  {selectedSize.quantity} size {selectedSize.size}
+                  {selectedSize?.quantity} size {selectedSize?.size}
                 </div>
               </div>
             )}
@@ -269,7 +271,7 @@ function ProductDetails() {
             </div>
 
             <div className="product-details-right-description font-3">
-              {product.description}
+              {product?.description}
             </div>
           </div>
         </div>

@@ -90,7 +90,9 @@ export const updateCart = async (id, cart) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(id, cart, {
       new: true,
-    });
+    })
+      .populate("user_id")
+      .populate("products.product_id");
     return updatedCart;
   } catch (error) {
     throw new Error(error.message);

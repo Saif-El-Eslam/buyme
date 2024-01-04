@@ -1,8 +1,9 @@
 .alert {
   position: fixed;
 
-  width: 100%;
+  width: 100vw;
   top: 150px;
+  left: 0;
 
   display: flex;
   justify-content: center;

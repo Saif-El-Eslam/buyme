@@ -3,73 +3,102 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/Footer";
 import CartItem from "../../components/CartItem/CartItem";
 import "./Cart.css";
+import { getCart } from "../../Services/CartAPICalls";
+import InfoMessage from "../../components/Messages/InfoMessage";
+import TokenService from "../../Services/AuthAPICalls";
+import { useNavigate } from "react-router";
 
 function Cart() {
-  const [cart, setCart] = useState({
-    products: [
-      {
-        id: 1,
-        title: "Cotton T-shirt",
-        image: "http://localhost:3001/categories/T-Shirt.jpg",
-        price: 50,
-        quantity: 3,
-        size: "M",
-      },
-      {
-        id: 2,
-        title: "Olive Cargo Pants",
-        image: "http://localhost:3001/categories/pants.jpg",
-        price: 15,
-        quantity: 1,
-        size: "M",
-      },
-    ],
-    total_price: 165,
-  });
+  const navigate = useNavigate();
+  const [cart, setCart] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+  const [refreshCart, setRefreshCart] = useState(false);
 
-  // update total price when cart changes
   useEffect(() => {
-    let total = 0;
-    cart.products.forEach((product) => {
-      total += product.price * product.quantity;
+    setCart({});
+    setLoading(true);
+    getCart().then((res) => {
+      if (res?.status === 200) {
+        setCart(res.data);
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
     });
-    setCart((prevCart) => {
-      const newCart = { ...prevCart };
-      newCart.total_price = total;
-      return newCart;
-    });
-  }, [cart.products]);
+  }, [refreshCart]);
 
-  console.log(cart.products);
+  console.log(cart);
 
   return (
     <div className="carts-page">
       <Header />
 
       <div className="carts-page-content">
+        {infomessage && (
+          <InfoMessage
+            message={infomessage}
+            setMessage={setInfoMessage}
+            type={infoMessageType}
+          />
+        )}
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="carts-page-title">
           <h1>Your Cart</h1>
         </div>
 
-        {(!cart || !cart.products.length) && (
+        {(!cart || !cart?.products?.length) && (
           <div className="carts-page-empty">
-            <h2 className="carts-page-empty-header">Your cart is empty</h2>
-            <p className="carts-page-empty-text">
-              Looks like you haven't added anything to your cart yet
-            </p>
+            {TokenService.getToken() ? (
+              <div className="cart-empty">
+                <h2 className="carts-page-empty-header">Your cart is empty</h2>
+                <p className="carts-page-empty-text">
+                  Looks like you haven't added anything to your cart yet
+                </p>
 
-            <div
-              className="button-wrapper"
-              onClick={() => {
-                window.location.href = "/products";
-              }}
-            >
-              <div className="button-green">Continue Shopping</div>
-            </div>
+                <div
+                  className="button-wrapper"
+                  onClick={() => {
+                    navigate("/products");
+                  }}
+                >
+                  <div className="button-green">Continue Shopping</div>
+                </div>
+              </div>
+            ) : (
+              <div className="cart-empty">
+                <h2 className="carts-page-empty-header">
+                  You're not logged in
+                </h2>
+                <p className="carts-page-empty-text">
+                  Please login to view your cart
+                </p>
+
+                <div
+                  className="button-wrapper"
+                  onClick={() => {
+                    navigate("/profile/login");
+                  }}
+                >
+                  <div className="button-green">Login</div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        {cart && cart.products.length > 0 && (
+        {cart && cart?.products?.length > 0 && (
           <div className="carts-page-list">
             <div className="cart-items-wrapper">
               {cart.products.map((product, i) => (
@@ -77,7 +106,8 @@ function Cart() {
                   <CartItem
                     product={product}
                     setCart={setCart}
-                    maxQuantity={50}
+                    setRefreshCart={setRefreshCart}
+                    refreshCart={refreshCart}
                   />
                 </div>
               ))}

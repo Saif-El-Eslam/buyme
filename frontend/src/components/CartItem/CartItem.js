@@ -1,54 +1,115 @@
 import React, { useState } from "react";
 import "./CartItem.css";
 import { useNavigate } from "react-router-dom";
+import {
+  deleteCartItem,
+  increaseProductQuantity,
+  decreaseProductQuantity,
+} from "../../Services/CartAPICalls";
+import InfoMessage from "../../components/Messages/InfoMessage";
 
 function CartItem({
-  product: { id, title, image, price, quantity, size },
-  maxQuantity,
+  //id, title, image, price
+  product: {
+    product_id: { title, images, price, _id },
+    quantity,
+    size,
+  },
   setCart,
+  refreshCart,
+  setRefreshCart,
 }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
   const [selectedQuantity, setSelectedQuantity] = useState(quantity);
 
-  const handleQuantityChange = (e) => {
-    //   allow empty string
-    if (e.target.value === "") {
-      setSelectedQuantity(0);
-      setCart((prevCart) => {
-        const newCart = { ...prevCart };
-        newCart.products = newCart.products.map((product) => {
-          if (product.id === id) {
-            product.quantity = e.target.value;
-          }
-          return product;
-        });
-        return newCart;
-      });
-    } // the value is a number
-    else if (e.target.value > 0 && e.target.value <= maxQuantity) {
-      setSelectedQuantity(e.target.value);
-      setCart((prevCart) => {
-        const newCart = { ...prevCart };
-        newCart.products = newCart.products.map((product) => {
-          if (product.id === id) {
-            product.quantity = e.target.value;
-          }
-          return product;
-        });
-        return newCart;
-      });
-    }
+  const handleIncreaseQuantity = () => {
+    setLoading(true);
+    increaseProductQuantity(_id, size).then((res) => {
+      if (res?.status === 200) {
+        setCart(res.data);
+        setSelectedQuantity(parseInt(selectedQuantity) + 1);
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
+  };
+
+  const handleDecreaseQuantity = () => {
+    setLoading(true);
+    decreaseProductQuantity(_id, size).then((res) => {
+      if (res?.status === 200) {
+        setCart(res.data);
+        setSelectedQuantity(parseInt(selectedQuantity) - 1);
+
+        if (selectedQuantity === 1) {
+          setRefreshCart(!refreshCart);
+        }
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
+  };
+
+  const handleDeleteCardItem = () => {
+    setLoading(true);
+    deleteCartItem(_id, size).then((res) => {
+      if (res?.status === 200) {
+        setCart(res.data);
+        setRefreshCart(!refreshCart);
+        setInfoMessage("Product removed from cart");
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
   };
   return (
     <div className="cart-item">
+      {infomessage && (
+        <InfoMessage
+          message={infomessage}
+          setMessage={setInfoMessage}
+          type={infoMessageType}
+        />
+      )}
+      {loading && (
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+        </div>
+      )}
       <div className="cart-item-wrapper">
         <div
           className="cart-item-image"
           onClick={() => {
-            navigate(`/products/${id}`);
+            navigate(`/products/${_id}`);
           }}
         >
-          <img src={image} alt={title} />
+          <img src={images ? images[0] : ""} alt={title} />
         </div>
 
         <div className="cart-item-details-quantity-price-wrapper">
@@ -56,7 +117,7 @@ function CartItem({
             <div
               className="cart-item-title font-4"
               onClick={() => {
-                navigate(`/products/${id}`);
+                navigate(`/products/${_id}`);
               }}
             >
               {title}
@@ -71,49 +132,16 @@ function CartItem({
               <div className="cart-item-quantity-wrapper">
                 <div
                   className="cart-item-quantity-minus font-3"
-                  onClick={() => {
-                    if (selectedQuantity > 1) {
-                      setSelectedQuantity(parseInt(selectedQuantity) - 1);
-                      setCart((prevCart) => {
-                        const newCart = { ...prevCart };
-                        newCart.products = newCart.products.map((product) => {
-                          if (product.id === id) {
-                            product.quantity = parseInt(selectedQuantity) - 1;
-                          }
-                          return product;
-                        });
-                        return newCart;
-                      });
-                    }
-                  }}
+                  onClick={() => handleDecreaseQuantity()}
                 >
                   -
                 </div>
                 <div className="cart-item-quantity-number">
-                  <input
-                    type="text"
-                    value={selectedQuantity}
-                    onChange={handleQuantityChange}
-                    className="cart-item-quantity-number-input"
-                  />
+                  {selectedQuantity}
                 </div>
                 <div
                   className="cart-item-quantity-plus font-3"
-                  onClick={() => {
-                    if (selectedQuantity < maxQuantity) {
-                      setSelectedQuantity(parseInt(selectedQuantity) + 1);
-                      setCart((prevCart) => {
-                        const newCart = { ...prevCart };
-                        newCart.products = newCart.products.map((product) => {
-                          if (product.id === id) {
-                            product.quantity = parseInt(selectedQuantity) + 1;
-                          }
-                          return product;
-                        });
-                        return newCart;
-                      });
-                    }
-                  }}
+                  onClick={() => handleIncreaseQuantity()}
                 >
                   +
                 </div>
@@ -132,15 +160,7 @@ function CartItem({
         <div className="cart-item-remove">
           <div
             className="cart-item-remove-button font-3"
-            onClick={() => {
-              setCart((prevCart) => {
-                const newCart = { ...prevCart };
-                newCart.products = newCart.products.filter(
-                  (product) => product.id !== id
-                );
-                return newCart;
-              });
-            }}
+            onClick={() => handleDeleteCardItem()}
           >
             <img src="http://localhost:3001/delete.png" alt="trash" />
           </div>

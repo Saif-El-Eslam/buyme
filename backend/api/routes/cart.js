@@ -131,6 +131,18 @@ router.put("/increase-product-quantity", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
+    // get product
+    const product = await getProductById(product_id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // get size
+    const sizeIndex = product.sizes.findIndex((item) => item.size === size);
+    if (sizeIndex === -1) {
+      return res.status(404).json({ message: "Size not found" });
+    }
+
     const productIndex = cart.products.findIndex((item) => {
       return (
         item.product_id._id.toString() === product_id && item.size === size
@@ -138,9 +150,16 @@ router.put("/increase-product-quantity", verifyToken, async (req, res) => {
     });
 
     if (productIndex > -1) {
-      const product = cart.products[productIndex];
-      product.quantity += 1;
-      cart.total_price += product.product_id.price;
+      const tempProduct = cart.products[productIndex];
+      tempProduct.quantity += 1;
+
+      if (tempProduct.quantity > product.sizes[sizeIndex].quantity) {
+        return res.status(404).json({
+          message: `Only available ${product.sizes[sizeIndex].quantity} items of this size.`,
+        });
+      }
+
+      cart.total_price += tempProduct.product_id.price;
     } else {
       return res.status(404).json({ message: "Product not found in cart" });
     }
