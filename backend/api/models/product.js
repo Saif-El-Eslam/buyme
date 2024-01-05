@@ -76,10 +76,22 @@ export const getProducts = async (fields) => {
 };
 
 // get n products after skipping m products
-export const getProductsByPage = async (n, m, fields) => {
+export const getProductsByPage = async (
+  n,
+  m,
+  fields,
+  sortBy = "createdAt",
+  sortDirection = 1
+) => {
   try {
-    const products = await Product.find().limit(n).skip(m).select(fields);
+    // sort by createdAt descending
+    const products = await Product.find()
+      .sort({ [sortBy]: sortDirection })
+      .limit(n)
+      .skip(m)
+      .select(fields);
     const totalProducts = await Product.countDocuments();
+
     return { products, totalProducts };
   } catch (error) {
     throw new Error(error.message);
@@ -87,9 +99,19 @@ export const getProductsByPage = async (n, m, fields) => {
 };
 
 // get n products after skipping m products by category
-export const getProductsByPageByCategory = async (n, m, category, fields) => {
+export const getProductsByPageByCategory = async (
+  n,
+  m,
+  category,
+  fields,
+  sortBy = "createdAt",
+  sortDirection = 1
+) => {
   try {
+    console.log("Here");
+    console.log(sortBy, sortDirection);
     const products = await Product.find({ category })
+      .sort({ [sortBy]: sortDirection })
       .limit(n)
       .skip(m)
       .select(fields);

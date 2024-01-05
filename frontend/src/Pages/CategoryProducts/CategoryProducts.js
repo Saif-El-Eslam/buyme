@@ -15,6 +15,10 @@ function CategoryProducts() {
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
 
+  const [sort, setSort] = useState({});
+  const [size, setSize] = useState([]);
+  const [totalProductsNumber, setTotalProductsNumber] = useState(0);
+
   const [categoryProducts, setCategoryProducts] = useState([]);
 
   useEffect(() => {
@@ -23,15 +27,20 @@ function CategoryProducts() {
 
   useEffect(() => {
     setLoading(true);
-    getProductsByPageByCategory(pageNumber, category).then((res) => {
-      setCategoryProducts(res.data?.products);
-      setTotalPages(res.data?.pagesCount);
-      if (res.data?.pagesCount < pageNumber) {
-        setPageNumber(res.data.pagesCount);
+    getProductsByPageByCategory(pageNumber, category, sort).then((res) => {
+      if (res?.status === 200) {
+        setCategoryProducts(res.data?.products);
+        setTotalPages(res.data?.pagesCount);
+        setTotalProductsNumber(res.data?.totalProducts);
+        if (res.data?.pagesCount < pageNumber) {
+          setPageNumber(res.data.pagesCount);
+        }
+      } else {
+        console.log(res?.data?.message);
       }
       setLoading(false);
     });
-  }, [pageNumber]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pageNumber, sort, size]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="category-products-page">
@@ -48,7 +57,11 @@ function CategoryProducts() {
         </div>
 
         <div className="filters-section">
-          <Filter />
+          <Filter
+            setSort={setSort}
+            setSize={setSize}
+            totalProductsNumber={totalProductsNumber}
+          />
         </div>
 
         <div className="category-products-section">

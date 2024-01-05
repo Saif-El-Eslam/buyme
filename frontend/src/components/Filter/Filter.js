@@ -1,10 +1,10 @@
 import React from "react";
 import "./Filter.css";
 import MultiSelector from "../Selectors/MultiSelector/MultiSelector";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Selector from "../Selectors/Selector/Selector";
 
-function Filter() {
+function Filter({ setSize, setSort, totalProductsNumber }) {
   const sizeOptions = [
     { value: "S", label: "S" },
     { value: "M", label: "M" },
@@ -14,11 +14,46 @@ function Filter() {
   ];
 
   const sortOptions = [
-    { value: "featured", label: "Featured" },
-    { value: "priceHL", label: "Price (High to Low)" },
-    { value: "priceLH", label: "Price (Low to High)" },
-    { value: "dateON", label: "Date (Old to New)" },
-    { value: "dateNO", label: "Date (New to Old)" },
+    {
+      id: 1,
+      value: {
+        sortBy: "createdAt",
+        sortDirection: 1,
+      },
+      label: "Featured",
+    },
+    {
+      id: 2,
+      value: {
+        sortField: "price",
+        sortDirection: -1,
+      },
+      label: "Price (High to Low)",
+    },
+    {
+      id: 3,
+      value: {
+        sortField: "price",
+        sortDirection: 1,
+      },
+      label: "Price (Low to High)",
+    },
+    {
+      id: 4,
+      value: {
+        sortField: "createdAt",
+        sortDirection: 1,
+      },
+      label: "Date (Old to New)",
+    },
+    {
+      id: 5,
+      value: {
+        sortField: "createdAt",
+        sortDirection: -1,
+      },
+      label: "Date (New to Old)",
+    },
   ];
 
   const [selectedSizes, setSelectedSizes] = useState([]);
@@ -31,6 +66,14 @@ function Filter() {
       })
     );
   };
+
+  useEffect(() => {
+    setSort(selectedSort?.value);
+  }, [selectedSort]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setSize(selectedSizes);
+  }, [selectedSizes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="filter">
@@ -55,12 +98,21 @@ function Filter() {
                 options={sortOptions}
                 selectedOption={selectedSort}
                 setSelectedOption={setSelectedSort}
-                defaultOption={{ value: "featured", label: "Featured" }}
+                defaultOption={{
+                  id: 1,
+                  value: {
+                    sortBy: "createdAt",
+                    sortDirection: 1,
+                  },
+                  label: "Featured",
+                }}
               />
             </div>
           </div>
 
-          <div className="filter-right-products-num font-5">39 products</div>
+          <div className="filter-right-products-num font-5">
+            {totalProductsNumber} products
+          </div>
         </div>
       </div>
 

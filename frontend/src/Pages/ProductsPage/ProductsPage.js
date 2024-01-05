@@ -12,6 +12,10 @@ function ProductsPage() {
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
 
+  const [sort, setSort] = useState({});
+  const [size, setSize] = useState([]);
+  const [totalProductsNumber, setTotalProductsNumber] = useState(0);
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -20,15 +24,22 @@ function ProductsPage() {
 
   useEffect(() => {
     setLoading(true);
-    getProductsByPage(pageNumber).then((res) => {
-      setProducts(res.data?.products);
-      setTotalPages(res.data?.pagesCount);
-      if (res.data?.pagesCount < pageNumber) {
-        setPageNumber(res.data.pagesCount);
+    getProductsByPage(pageNumber, sort).then((res) => {
+      if (res?.status === 200) {
+        setProducts(res?.data?.products);
+        setTotalPages(res?.data?.pagesCount);
+        setTotalProductsNumber(res?.data?.totalProducts);
+        if (res?.data?.pagesCount < pageNumber) {
+          setPageNumber(res?.data?.pagesCount);
+        }
+      } else {
+        console.log(res?.data?.message);
       }
       setLoading(false);
     });
-  }, [pageNumber]);
+  }, [pageNumber, sort, size]);
+
+  console.log(sort);
 
   return (
     <div className="products-page">
@@ -45,7 +56,11 @@ function ProductsPage() {
         </div>
 
         <div className="filters-section">
-          <Filter />
+          <Filter
+            setSort={setSort}
+            setSize={setSize}
+            totalProductsNumber={totalProductsNumber}
+          />
         </div>
 
         <div className="products-section">

@@ -1,18 +1,29 @@
 import api from "./Middlewares";
 import TokenService from "./AuthAPICalls";
 
-export const getProductsByPage = async (pageNum) => {
+export const getProductsByPage = async (pageNum, sortFields) => {
   try {
-    return await api.get(`/products/skip/${pageNum - 1}/take/10`);
+    console.log(sortFields);
+    return await api.get(
+      `/products/skip/${pageNum - 1}/take/10/${sortFields.sortField}/${
+        sortFields.sortDirection
+      }`
+    );
   } catch (error) {
     return error.response;
   }
 };
 
-export const getProductsByPageByCategory = async (pageNum, category) => {
+export const getProductsByPageByCategory = async (
+  pageNum,
+  category,
+  sortFields
+) => {
   try {
     return await api.get(
-      `/products/category/${category}/skip/${pageNum - 1}/take/10`
+      `/products/category/${category}/skip/${pageNum - 1}/take/10/${
+        sortFields.sortField
+      }/${sortFields.sortDirection}`
     );
   } catch (error) {
     return error.response;
