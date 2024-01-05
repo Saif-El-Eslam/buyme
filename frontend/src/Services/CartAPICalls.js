@@ -1,11 +1,10 @@
-import axios from "axios";
+import api from "./Middlewares";
 import TokenService from "./AuthAPICalls";
 
 export const addToCart = async (productId, quantity, size) => {
   try {
-    console.log(productId, quantity, size);
-    return await axios.put(
-      `${process.env.REACT_APP_API_URL}/cart/add-product`,
+    return await api.put(
+      `/cart/add-product`,
       {
         product_id: productId,
         quantity,
@@ -18,13 +17,13 @@ export const addToCart = async (productId, quantity, size) => {
       }
     );
   } catch (error) {
-    return error.response.data.message;
+    return error.response;
   }
 };
 
 export const getCart = async () => {
   try {
-    return await axios.get(`${process.env.REACT_APP_API_URL}/cart`, {
+    return await api.get(`/cart`, {
       headers: {
         Authorization: `Bearer ${TokenService.getToken()}`,
       },
@@ -36,8 +35,8 @@ export const getCart = async () => {
 
 export const deleteCartItem = async (productId, size) => {
   try {
-    return await axios.put(
-      `${process.env.REACT_APP_API_URL}/cart/remove-product`,
+    return await api.put(
+      `/cart/remove-product`,
       {
         product_id: productId,
         size,
@@ -55,8 +54,8 @@ export const deleteCartItem = async (productId, size) => {
 
 export const increaseProductQuantity = async (productId, size) => {
   try {
-    return await axios.put(
-      `${process.env.REACT_APP_API_URL}/cart/increase-product-quantity`,
+    return await api.put(
+      `/cart/increase-product-quantity`,
       {
         product_id: productId,
         size,
@@ -74,8 +73,8 @@ export const increaseProductQuantity = async (productId, size) => {
 
 export const decreaseProductQuantity = async (productId, size) => {
   try {
-    return await axios.put(
-      `${process.env.REACT_APP_API_URL}/cart/decrease-product-quantity`,
+    return await api.put(
+      `/cart/decrease-product-quantity`,
       {
         product_id: productId,
         size,

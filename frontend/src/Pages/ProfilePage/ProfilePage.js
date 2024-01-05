@@ -3,9 +3,20 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/Footer";
 import "./ProfilePage.css";
 import TokenService from "../../Services/AuthAPICalls";
-import { getProfile } from "../../Services/profileAPICalls";
+import {
+  getProfile,
+  updateProfile,
+  changePassword,
+} from "../../Services/profileAPICalls";
+import { useNavigate } from "react-router-dom";
+import InfoMessage from "../../components/Messages/InfoMessage";
 
 function ProfilePage() {
+  const navigate = useNavigate();
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+  const [loading, setLoading] = useState(false);
+
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [tab, setTab] = useState(screenWidth > 850 ? "info" : "");
   const [showUpdatePassword, setShowUpdatePassword] = useState(false);
@@ -30,30 +41,79 @@ function ProfilePage() {
   useEffect(() => {
     // redirect to login if not logged in
     if (!TokenService.getToken()) {
-      window.location.href = "/profile/login";
+      navigate("/profile/login");
     }
 
     // get profile info
-    getProfile(TokenService.getToken()).then((response) => {
+    getProfile().then((response) => {
       if (response.status === 200) {
         setUser({
           first_name: response.data.first_name || "",
           last_name: response.data.last_name || "",
           email: response.data.email || "",
           phone: response.data.phone || "",
-          address: response.data.address || {},
-          payment_method: response.data.payment_method || {},
+          address: response.data.address || null,
+          payment_method: response.data.payment_method || null,
         });
+      } else {
+        setInfoMessage(response.data.message);
+        setInfoMessageType("error");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
       }
     });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleUpdateInfo = () => {
-    console.log(user);
+    setLoading(true);
+    updateProfile(user).then((res) => {
+      if (res.status === 200) {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
   };
 
   const handleUpdatePassword = () => {
-    console.log(updatePassword);
+    setLoading(true);
+    changePassword(updatePassword).then((res) => {
+      if (res.status === 200) {
+        setUpdatePassword({
+          oldPassword: "",
+          newPassword: "",
+        }); // clear password fields
+        setInfoMessage(res.data.message);
+        setInfoMessageType("info");
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      } else {
+        setInfoMessage(res.data.message);
+        setInfoMessageType("error");
+
+        setTimeout(() => {
+          setInfoMessage("");
+          setInfoMessageType("");
+        }, 3000);
+      }
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -78,6 +138,20 @@ function ProfilePage() {
       <Header />
 
       <div className="profile-content">
+        {infomessage && (
+          <InfoMessage
+            message={infomessage}
+            setMessage={setInfoMessage}
+            type={infoMessageType}
+          />
+        )}
+
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="profile-header font-0">
           <h1 className="profile-header-title">Profile</h1>
         </div>
@@ -322,7 +396,7 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="Country"
-                            value={user.address.country}
+                            value={user.address?.country}
                             onChange={(e) =>
                               setUser({
                                 ...user,
@@ -345,7 +419,7 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="Governorate"
-                            value={user.address.governorate}
+                            value={user.address?.governorate}
                             onChange={(e) =>
                               setUser({
                                 ...user,
@@ -368,7 +442,7 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="City"
-                            value={user.address.city}
+                            value={user.address?.city}
                             onChange={(e) =>
                               setUser({
                                 ...user,
@@ -392,7 +466,7 @@ function ProfilePage() {
                         <input
                           type="text"
                           placeholder="Street"
-                          value={user.address.street}
+                          value={user.address?.street}
                           onChange={(e) =>
                             setUser({
                               ...user,
@@ -415,7 +489,7 @@ function ProfilePage() {
                         <input
                           type="text"
                           placeholder="Notes"
-                          value={user.address.notes}
+                          value={user.address?.notes}
                           onChange={(e) =>
                             setUser({
                               ...user,
@@ -471,7 +545,7 @@ function ProfilePage() {
                         <input
                           type="text"
                           placeholder="Card Number"
-                          value={user.payment_method.card_number}
+                          value={user.payment_method?.card_number}
                           onChange={(e) =>
                             setUser({
                               ...user,
@@ -495,7 +569,7 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="Expiry Date"
-                            value={user.payment_method.expiry_date}
+                            value={user.payment_method?.expiry_date}
                             onChange={(e) =>
                               setUser({
                                 ...user,
@@ -518,7 +592,7 @@ function ProfilePage() {
                           <input
                             type="text"
                             placeholder="CVV"
-                            value={user.payment_method.cvv}
+                            value={user.payment_method?.cvv}
                             onChange={(e) =>
                               setUser({
                                 ...user,
@@ -542,7 +616,7 @@ function ProfilePage() {
                         <input
                           type="text"
                           placeholder="Notes"
-                          value={user.payment_method.notes}
+                          value={user.payment_method?.notes}
                           onChange={(e) =>
                             setUser({
                               ...user,

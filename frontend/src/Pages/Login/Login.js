@@ -24,7 +24,7 @@ function Login() {
           ? navigate("/admin/products")
           : navigate("/");
       } else {
-        setError(response);
+        setError(response.data.message);
         setTimeout(() => {
           setError(false);
         }, 3000);

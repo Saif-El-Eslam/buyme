@@ -37,18 +37,29 @@ function ProductForm({ product, setProduct, onAction, isCreateProduct }) {
     });
 
     try {
-      uploadImage(product._id, formData).then((data) => {
-        console.log(data);
-        setOldImages([...data]);
-        setNewImages([]);
-        setLoading(false);
+      uploadImage(product._id, formData).then((res) => {
+        console.log(res);
+        if (res?.status === 200) {
+          setOldImages([...res.data]);
+          setNewImages([]);
+          setLoading(false);
 
-        setInfoMessage("Images uploaded successfully");
-        setInfoMessageType("info");
-        setTimeout(() => {
-          setInfoMessage("");
-          setInfoMessageType("");
-        }, 3000);
+          setInfoMessage("Images uploaded successfully");
+          setInfoMessageType("info");
+          setTimeout(() => {
+            setInfoMessage("");
+            setInfoMessageType("");
+          }, 3000);
+        } else {
+          setInfoMessage(res.data.message);
+          setInfoMessageType("error");
+
+          setTimeout(() => {
+            setInfoMessage("");
+            setInfoMessageType("");
+          }, 3000);
+        }
+        setLoading(false);
       });
     } catch (error) {
       console.log("imageUpload" + error);

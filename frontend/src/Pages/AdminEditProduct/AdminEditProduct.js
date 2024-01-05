@@ -19,7 +19,6 @@ function AdminEditProduct() {
   useEffect(() => {
     setLoading(true);
     getProductById(productId).then((res) => {
-      console.log(res);
       setProduct(res.data);
       setLoading(false);
     });
@@ -42,7 +41,7 @@ function AdminEditProduct() {
           setInfoMessageType("");
         }, 3000);
       } else {
-        setInfoMessage(res);
+        setInfoMessage(res.data.message);
         setInfoMessageType("error");
 
         setTimeout(() => {

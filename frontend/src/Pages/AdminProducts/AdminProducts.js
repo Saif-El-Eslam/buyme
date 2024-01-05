@@ -41,7 +41,7 @@ function AdminProducts() {
 
         setDeleteFlag(!deletFlag);
       } else {
-        setInfoMessage(res);
+        setInfoMessage(res.data.message);
         setInfoMessageType("error");
 
         setTimeout(() => {

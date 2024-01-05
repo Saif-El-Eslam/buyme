@@ -1,32 +1,26 @@
-import axios from "axios";
+import api from "./Middlewares";
 import Cookies from "js-cookie";
 
 export const signup = async (user) => {
   try {
-    return await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/signup`,
-      user
-    );
+    return await api.post(`/auth/signup`, user);
   } catch (error) {
-    return error.response.data.message;
+    return error.response;
   }
 };
 
 export const login = async (user) => {
   try {
-    return await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/login`,
-      user
-    );
+    return await api.post(`/auth/login`, user);
   } catch (error) {
-    return error.response.data.message;
+    return error.response;
   }
 };
 
 export const logout = async () => {
   try {
-    return await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/logout`,
+    return await api.post(
+      `/auth/logout`,
       {},
       {
         headers: {

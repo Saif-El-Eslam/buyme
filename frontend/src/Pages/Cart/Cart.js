@@ -23,7 +23,7 @@ function Cart() {
       if (res?.status === 200) {
         setCart(res.data);
       } else {
-        setInfoMessage(res.data.message);
+        setInfoMessage(res?.data?.message);
         setInfoMessageType("error");
         setTimeout(() => {
           setInfoMessage("");

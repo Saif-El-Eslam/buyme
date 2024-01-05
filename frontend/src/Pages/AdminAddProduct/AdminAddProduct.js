@@ -51,7 +51,7 @@ function AdminAddProduct() {
           // navigate("/admin/products");
         }, 3000);
       } else {
-        setInfoMessage(res);
+        setInfoMessage(res.data.message);
         setInfoMessageType("error");
 
         setTimeout(() => {

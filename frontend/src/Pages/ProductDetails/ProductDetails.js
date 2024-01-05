@@ -24,8 +24,6 @@ function ProductDetails() {
 
   const [product, setProduct] = useState({});
 
-  console.log(product);
-
   useEffect(() => {
     setLoading(true);
     getProductById(id).then((res) => {
@@ -73,8 +71,6 @@ function ProductDetails() {
       return;
     }
 
-    console.log(TokenService.getToken());
-
     if (!TokenService.getToken()) {
       setInfoMessage("You need to login first");
       setInfoMessageType("error");
@@ -88,7 +84,6 @@ function ProductDetails() {
       setLoading(true);
       addToCart(product._id, selectedQuantity, selectedSize.size).then(
         (res) => {
-          console.log(res);
           if (res?.status === 200) {
             setInfoMessage(res.data.message);
             setInfoMessageType("info");
@@ -97,7 +92,7 @@ function ProductDetails() {
               setInfoMessageType("");
             }, 3000);
           } else {
-            setInfoMessage(res);
+            setInfoMessage(res.data.message);
             setInfoMessageType("error");
 
             setTimeout(() => {
