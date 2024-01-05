@@ -18,7 +18,7 @@ function AdminProducts() {
 
   useEffect(() => {
     setLoading(true);
-    getProductsByPage(pageNumber, {}).then((res) => {
+    getProductsByPage(pageNumber, {}, []).then((res) => {
       setProducts(res.data?.products);
       setTotalPages(res.data?.pagesCount);
       if (res.data?.pagesCount < pageNumber) {

@@ -17,8 +17,8 @@ function Filter({ setSize, setSort, totalProductsNumber }) {
     {
       id: 1,
       value: {
-        sortBy: "createdAt",
-        sortDirection: 1,
+        sortBy: "quantity",
+        sortDirection: -1,
       },
       label: "Featured",
     },
@@ -98,14 +98,7 @@ function Filter({ setSize, setSort, totalProductsNumber }) {
                 options={sortOptions}
                 selectedOption={selectedSort}
                 setSelectedOption={setSelectedSort}
-                defaultOption={{
-                  id: 1,
-                  value: {
-                    sortBy: "createdAt",
-                    sortDirection: 1,
-                  },
-                  label: "Featured",
-                }}
+                defaultOption={sortOptions[0]}
               />
             </div>
           </div>

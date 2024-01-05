@@ -80,17 +80,34 @@ export const getProductsByPage = async (
   n,
   m,
   fields,
-  sortBy = "createdAt",
-  sortDirection = 1
+  sortBy = "quantity",
+  sortDirection = -1,
+  sizes = []
 ) => {
   try {
-    // sort by createdAt descending
     const products = await Product.find()
+      .where(
+        sizes.length > 0
+          ? {
+              sizes: {
+                $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
+              },
+            }
+          : {}
+      )
       .sort({ [sortBy]: sortDirection })
       .limit(n)
       .skip(m)
       .select(fields);
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments().where(
+      sizes.length > 0
+        ? {
+            sizes: {
+              $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
+            },
+          }
+        : {}
+    );
 
     return { products, totalProducts };
   } catch (error) {
@@ -104,18 +121,34 @@ export const getProductsByPageByCategory = async (
   m,
   category,
   fields,
-  sortBy = "createdAt",
-  sortDirection = 1
+  sortBy = "quantity",
+  sortDirection = -1,
+  sizes = []
 ) => {
   try {
-    console.log("Here");
-    console.log(sortBy, sortDirection);
     const products = await Product.find({ category })
+      .where(
+        sizes.length > 0
+          ? {
+              sizes: {
+                $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
+              },
+            }
+          : {}
+      )
       .sort({ [sortBy]: sortDirection })
       .limit(n)
       .skip(m)
       .select(fields);
-    const totalProducts = await Product.countDocuments({ category });
+    const totalProducts = await Product.countDocuments({ category }).where(
+      sizes.length > 0
+        ? {
+            sizes: {
+              $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
+            },
+          }
+        : {}
+    );
 
     return { products, totalProducts };
   } catch (error) {

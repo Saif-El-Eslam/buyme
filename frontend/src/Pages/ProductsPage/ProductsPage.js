@@ -24,7 +24,11 @@ function ProductsPage() {
 
   useEffect(() => {
     setLoading(true);
-    getProductsByPage(pageNumber, sort).then((res) => {
+    getProductsByPage(
+      pageNumber,
+      sort,
+      size.map((size) => size.value).join(",")
+    ).then((res) => {
       if (res?.status === 200) {
         setProducts(res?.data?.products);
         setTotalPages(res?.data?.pagesCount);
@@ -33,13 +37,13 @@ function ProductsPage() {
           setPageNumber(res?.data?.pagesCount);
         }
       } else {
-        console.log(res?.data?.message);
+        // console.log(res?.data?.message);
       }
       setLoading(false);
     });
   }, [pageNumber, sort, size]);
 
-  console.log(sort);
+  // console.log(products);
 
   return (
     <div className="products-page">

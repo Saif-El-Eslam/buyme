@@ -27,7 +27,12 @@ function CategoryProducts() {
 
   useEffect(() => {
     setLoading(true);
-    getProductsByPageByCategory(pageNumber, category, sort).then((res) => {
+    getProductsByPageByCategory(
+      pageNumber,
+      category,
+      sort,
+      size.map((size) => size.value).join(",")
+    ).then((res) => {
       if (res?.status === 200) {
         setCategoryProducts(res.data?.products);
         setTotalPages(res.data?.pagesCount);
@@ -36,7 +41,7 @@ function CategoryProducts() {
           setPageNumber(res.data.pagesCount);
         }
       } else {
-        console.log(res?.data?.message);
+        // console.log(res);
       }
       setLoading(false);
     });
