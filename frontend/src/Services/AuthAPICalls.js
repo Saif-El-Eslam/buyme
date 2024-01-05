@@ -33,6 +33,27 @@ export const logout = async () => {
   }
 };
 
+export const sendOtp = async (email) => {
+  try {
+    return await api.post(`/auth/reset-password-otp`, { email });
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const resetPassword = async (otp, email, password, verify_password) => {
+  try {
+    return await api.post(`/auth/reset-password`, {
+      otp,
+      email,
+      password,
+      verify_password,
+    });
+  } catch (error) {
+    return error.response;
+  }
+};
+
 //////////////////////////////////////////////
 const TOKEN_KEY = process.env.REACT_APP_TOKEN_KEY;
 

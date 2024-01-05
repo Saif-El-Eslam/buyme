@@ -13,6 +13,7 @@ import AdminOrders from "./Pages/AdminOrders/AdminOrders";
 import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
 import AdminAddProduct from "./Pages/AdminAddProduct/AdminAddProduct";
 import OrderDetails from "./Pages/OrderDetails/OrderDetails";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 // import TokenService from "./Services/Auth";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
 
         <Route path="/profile/login" element={<Login />} />
         <Route path="/profile/signup" element={<SignUp />} />
+        <Route path="/profile/reset-password" element={<ResetPassword />} />
 
         <Route path="/profile" element={<ProfilePage />} />
 

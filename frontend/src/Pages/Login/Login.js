@@ -68,7 +68,10 @@ function Login() {
               </div>
             </div>
 
-            <div className="login-forgot-password-wrapper">
+            <div
+              className="login-forgot-password-wrapper"
+              onClick={() => navigate("/profile/reset-password")}
+            >
               Forgot your password?
             </div>
 

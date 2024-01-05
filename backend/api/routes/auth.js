@@ -248,29 +248,29 @@ router.post("/verify-email/:token", verifyEmailToken, (req, res) => {
   }
 });
 
-router.post("/reset-password-otp", verifyToken, (req, res) => {
+router.post("/reset-password-otp", (req, res) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   try {
-    const user_id = req.user_id;
+    const email = req.body.email;
 
     // get user
-    getUserById(user_id).then((user) => {
+    getUserByEmail(email).then((user) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
       const otp = {
         otp: Math.floor(100000 + Math.random() * 900000),
-        expiry_date: Date.now() + 600000, // 10 minutes
+        expiry_date: Date.now() + 300000, // 1000 ms = 1 s, 300000 ms = 5 min
       };
 
       // add otp to user
-      updateUser(user_id, { otp });
+      updateUser(user.id, { otp });
 
       // send email
       const msg = {
-        to: "saif82820@gmail.com",
+        to: email,
         from: "saifeleslam3520@gmail.com",
         subject: "Verify your email",
         text: "Verify your email",
@@ -306,10 +306,9 @@ router.post("/reset-password-otp", verifyToken, (req, res) => {
   }
 });
 
-router.post("/reset-password", verifyToken, (req, res) => {
+router.post("/reset-password", (req, res) => {
   try {
-    const user_id = req.user_id;
-    const { otp, password, verify_password } = req.body;
+    const { otp, password, verify_password, email } = req.body;
 
     // Validate password, must be at least 8 characters long and contain at least 1 number, 1 uppercase letter, and 1 lowercase letter
     if (!validator.isStrongPassword(password, { minSymbols: 0 })) {
@@ -321,7 +320,7 @@ router.post("/reset-password", verifyToken, (req, res) => {
     }
 
     // get user
-    getUserById(user_id).then((user) => {
+    getUserByEmail(email).then((user) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -340,7 +339,7 @@ router.post("/reset-password", verifyToken, (req, res) => {
       const password_hash = bcrypt.hashSync(password, 10);
 
       // update user
-      updateUser(user_id, { password_hash, otp: { otp: null } });
+      updateUser(user.id, { password_hash, otp: { otp: null } });
 
       res.json({ message: "Password reset successfully" });
     });
