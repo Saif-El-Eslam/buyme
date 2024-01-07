@@ -45,7 +45,7 @@ router.get(
         req.params.sortBy && req.params.sortBy !== "undefined"
           ? req.params.sortBy
           : "quantity";
-      const sortDirection = parseInt(req.params.sortDirection) || -1;
+      const sortDirection = parseInt(req.params.sortDirection) || 1;
       const sizes = req.params.sizes && req.params.sizes.split(",");
 
       const { products, totalProducts } = await getProductsByPage(
@@ -107,7 +107,7 @@ router.get(
         req.params.sortBy && req.params.sortBy !== "undefined"
           ? req.params.sortBy
           : "quantity";
-      const sortDirection = parseInt(req.params.sortDirection) || -1;
+      const sortDirection = parseInt(req.params.sortDirection) || 1;
       const sizes = req.params.sizes && req.params.sizes.split(",");
 
       const { products, totalProducts } = await getProductsByPageByCategory(
@@ -255,7 +255,9 @@ router.put(
       });
 
       const updatedProduct = await updateProduct(req.params.id, { images });
-      res.json(updatedProduct.images);
+      res
+        .status(200)
+        .json({ message: "Image added", images: updatedProduct.images });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

@@ -81,7 +81,7 @@ export const getProductsByPage = async (
   m,
   fields,
   sortBy = "quantity",
-  sortDirection = -1,
+  sortDirection = 1,
   sizes = []
 ) => {
   try {
@@ -122,7 +122,7 @@ export const getProductsByPageByCategory = async (
   category,
   fields,
   sortBy = "quantity",
-  sortDirection = -1,
+  sortDirection = 1,
   sizes = []
 ) => {
   try {

@@ -56,14 +56,14 @@ router.put("/", verifyToken, async (req, res) => {
 
     // Validate address
     if (
-      (req.body.address.country.length ||
-        req.body.address.governorate.length ||
-        req.body.address.city.length ||
-        req.body.address.street.length) &&
-      (!req.body.address.country.length ||
-        !req.body.address.governorate.length ||
-        !req.body.address.city.length ||
-        !req.body.address.street.length)
+      (req.body.address?.country?.length ||
+        req.body.address?.governorate?.length ||
+        req.body.address?.city?.length ||
+        req.body.address?.street?.length) &&
+      (!req.body.address?.country?.length ||
+        !req.body.address?.governorate?.length ||
+        !req.body.address?.city?.length ||
+        !req.body.address?.street?.length)
     ) {
       return res.status(400).json({
         message:
@@ -71,10 +71,10 @@ router.put("/", verifyToken, async (req, res) => {
       });
     }
     if (
-      !req.body.address.country.length &&
-      !req.body.address.governorate.length &&
-      !req.body.address.city.length &&
-      !req.body.address.street.length
+      !req.body.address?.country?.length &&
+      !req.body.address?.governorate?.length &&
+      !req.body.address?.city?.length &&
+      !req.body.address?.street?.length
     ) {
       req.body.address = null;
     }

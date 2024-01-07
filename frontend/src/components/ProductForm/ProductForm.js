@@ -38,8 +38,9 @@ function ProductForm({ product, setProduct, onAction, isCreateProduct }) {
 
     try {
       uploadImage(product._id, formData).then((res) => {
+        console.log(res);
         if (res?.status === 200) {
-          setOldImages([...res.data]);
+          setOldImages([...res.data.images]);
           setNewImages([]);
           setLoading(false);
 

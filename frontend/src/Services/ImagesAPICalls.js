@@ -13,7 +13,7 @@ export const uploadImage = async (productId, formData) => {
       }
     );
 
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }
@@ -31,7 +31,7 @@ export const deleteImage = async (productId, images) => {
       }
     );
 
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }
