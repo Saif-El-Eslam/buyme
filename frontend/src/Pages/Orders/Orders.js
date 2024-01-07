@@ -26,7 +26,7 @@ function AdminOrders() {
         if (res?.status === 200) {
           setOrders(res.data.orders);
           setTotalPages(res.data.pagesCount);
-          console.log(res.data);
+
           window.scrollTo(0, 0);
         } else {
           setInfoMessage(res?.data?.message);

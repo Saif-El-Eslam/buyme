@@ -204,7 +204,6 @@ router.post("/verify-email", verifyToken, (req, res) => {
           res.json({ message: "Email sent" });
         })
         .catch((error) => {
-          console.error(error);
           res.status(500).json({ message: "Internal server error" });
         });
     });
@@ -296,7 +295,6 @@ router.post("/reset-password-otp", (req, res) => {
           res.json({ message: "Email sent" });
         })
         .catch((error) => {
-          console.error(error);
           res.status(500).json({ message: "Internal server error" });
         });
     });

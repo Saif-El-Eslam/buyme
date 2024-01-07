@@ -139,7 +139,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .order-info-details-body-item-products-list-item {

@@ -83,7 +83,7 @@ router.get("/days/:n", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     if (req.role !== "user" && req.role !== "admin") {
       return res.status(403).json({

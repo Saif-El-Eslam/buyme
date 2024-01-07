@@ -1,73 +1,107 @@
 import "./OrderDetails.css";
 import Header from "../../components/Header/header";
-import React, { useState } from "react";
+import Footer from "../../components/Footer/Footer";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { getOrderById, updateOrderStatus } from "../../Services/OrderAPICalls";
+import InfoMessage from "../../components/Messages/InfoMessage";
+import TokenService from "../../Services/AuthAPICalls";
 
 function OrderDetails() {
-  const admin = true;
+  const { id } = useParams();
+  const admin = TokenService.getRole() === "admin" ? true : false;
   const navigate = useNavigate();
-  const [order, setOrder] = useState({
-    id: useParams().id,
-    orderDate: "2021-09-01",
-    totalPrice: 320,
-    status: "ordered",
-    customerEmail: "customer@shopping.com",
-    delivery_address: {
-      street: "123 Main St",
-      city: "New York",
-      governorate: "New York",
-      country: "USA",
-    },
-    payment_method: {
-      card_number: "1234 1234 1234 1234",
-      method: "Visa",
-    },
-    products: [
-      {
-        id: "6585933c31aa85240eafe96f",
-        title: "Nike Slim Shirt",
-        price: 120,
-        image: "http://localhost:3001/close.png",
-        quantity: 3,
-        size: "M",
-      },
-      {
-        id: 2,
-        title: "Nike Slim Shirt",
-        price: 20,
-        image: "http://localhost:3001/close.png",
-        quantity: 1,
-        size: "L",
-      },
-      {
-        id: 3,
-        title: "Nike Slim Shirt",
-        price: 20,
-        image: "http://localhost:3001/close.png",
-        quantity: 1,
-        size: "L",
-      },
-      {
-        id: 4,
-        title: "Nike Slim Shirt",
-        price: 20,
-        image: "http://localhost:3001/close.png",
-        quantity: 1,
-        size: "L",
-      },
-    ],
-  });
+
+  const [loading, setLoading] = useState(false);
+  const [infomessage, setInfoMessage] = useState();
+  const [infoMessageType, setInfoMessageType] = useState();
+
+  const [order, setOrder] = useState({});
+
+  useEffect(() => {
+    setLoading(true);
+    getOrderById(id)
+      .then((res) => {
+        if (res?.status === 200) {
+          setOrder(res.data);
+          window.scrollTo(0, 0);
+        } else {
+          setInfoMessage(res?.data?.message);
+          setInfoMessageType("error");
+          setTimeout(() => {
+            setInfoMessage("");
+            setInfoMessageType("");
+          }, 3000);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err?.data?.message);
+        setLoading(false);
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleStatusChange = () => {
+    setLoading(true);
+
+    const newStatus = admin ? "delivered" : "cancelled";
+
+    updateOrderStatus(id, newStatus)
+      .then((res) => {
+        console.log(res);
+        if (res?.status === 200) {
+          setOrder(res?.data);
+          setInfoMessage(
+            admin
+              ? "Order status updated successfully"
+              : "Order cancelled successfully"
+          );
+          setInfoMessageType("info");
+          setTimeout(() => {
+            setInfoMessage("");
+            setInfoMessageType("");
+          }, 3000);
+        } else {
+          setInfoMessage(res?.data?.message);
+          setInfoMessageType("error");
+          setTimeout(() => {
+            setInfoMessage("");
+            setInfoMessageType("");
+          }, 3000);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err?.data?.message);
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="order-details">
       <Header />
 
       <div className="order-details-wrapper">
+        {infomessage && (
+          <InfoMessage
+            message={infomessage}
+            setMessage={setInfoMessage}
+            type={infoMessageType}
+          />
+        )}
+        {loading && (
+          <div className="loader-wrapper">
+            <div className="loader"></div>
+          </div>
+        )}
+
         <div className="order-details-orders-link-wrapper">
           <div
             className="order-details-orders-link"
-            onClick={() => navigate("/admin/orders")}
+            onClick={() =>
+              admin ? navigate("/admin/orders") : navigate("/orders")
+            }
           >
             /orders
           </div>
@@ -77,7 +111,10 @@ function OrderDetails() {
           <div className="order-details-title">Order Details</div>
 
           {order.status === "ordered" && (
-            <div className="order-details-button-wrapper button-wrapper">
+            <div
+              className="order-details-button-wrapper button-wrapper"
+              onClick={() => handleStatusChange()}
+            >
               <div className="button-border-green">
                 {admin ? "Set as Delivered" : "Cancel Order"}
               </div>
@@ -92,7 +129,7 @@ function OrderDetails() {
                 Order ID
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.id}
+                {order._id}
               </div>
             </div>
 
@@ -101,7 +138,7 @@ function OrderDetails() {
                 Customer Email
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.customerEmail}
+                {order?.user_id?.email}
               </div>
             </div>
           </div>
@@ -112,7 +149,7 @@ function OrderDetails() {
                 Order Date
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.orderDate}
+                {new Date(order?.createdAt).toLocaleDateString("en-US")}
               </div>
             </div>
 
@@ -121,7 +158,7 @@ function OrderDetails() {
                 Total Price
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.totalPrice}
+                {order.total_price}
               </div>
             </div>
 
@@ -140,28 +177,28 @@ function OrderDetails() {
               Delivery Address
             </div>
             <div className="order-info-details-body-item-value font-0">
-              {order.delivery_address.street}, {order.delivery_address.city},{" "}
-              {order.delivery_address.governorate},{" "}
-              {order.delivery_address.country}
+              {order.delivery_address?.street}, {order.delivery_address?.city},{" "}
+              {order.delivery_address?.governorate},{" "}
+              {order.delivery_address?.country}
             </div>
           </div>
 
           <div className="order-info-details-items-wrapper-2">
-            <div className="order-info-details-body-item">
+            {/* <div className="order-info-details-body-item">
               <div className="order-info-details-body-item-title font-3">
                 Card Number
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.payment_method.card_number}
+                {order.payment_method?.card_number}
               </div>
-            </div>
+            </div> */}
 
             <div className="order-info-details-body-item">
               <div className="order-info-details-body-item-title font-3">
                 Payment Method
               </div>
               <div className="order-info-details-body-item-value font-0">
-                {order.payment_method.method}
+                {order.payment_method?.payment_type}
               </div>
             </div>
           </div>
@@ -172,10 +209,13 @@ function OrderDetails() {
             </div>
 
             <div className="order-info-details-body-item-products-list">
-              {order.products.map((product, i) => (
-                <div className="order-info-details-body-item-products-list-item">
+              {order.products?.map((product, i) => (
+                <div
+                  className="order-info-details-body-item-products-list-item"
+                  key={i}
+                >
                   <div className="order-info-details-body-item-products-list-item-image">
-                    <img src={product.image} alt="" />
+                    <img src={product.product_id.images[0]} alt="" />
                   </div>
 
                   <div className="order-info-details-body-item-products-list-item-details-wrapper">
@@ -184,13 +224,13 @@ function OrderDetails() {
                         ID:
                       </div>
                       <div className="order-info-details-body-item-products-list-item-id-value font-0">
-                        {product.id}
+                        {product.product_id._id}
                       </div>
                     </div>
 
                     <div className="order-info-details-body-item-products-list-item-details">
-                      <div className="order-info-details-body-item-products-list-item-details-title font-3">
-                        {product.title}
+                      <div className="order-info-details-body-item-products-list-item-details-title font-4">
+                        {product.product_id.title}
                       </div>
                       <div className="order-info-details-body-item-products-list-item-details-size font-0">
                         Size: {product.size}
@@ -199,8 +239,8 @@ function OrderDetails() {
                         Qty: {product.quantity}
                       </div>
                       <div className="order-info-details-body-item-products-list-item-details-price font-0">
-                        ${product.price} X {product.quantity} = $
-                        {product.price * product.quantity}
+                        ${product.product_id.price} X {product.quantity} = $
+                        {product.product_id.price * product.quantity}
                       </div>
                     </div>
                   </div>
@@ -210,6 +250,8 @@ function OrderDetails() {
           </div>
         </div>
       </div>
+
+      {!admin && <Footer />}
     </div>
   );
 }

@@ -8,7 +8,7 @@ function ProductCard({
 }) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
-  // console.log(hovered);
+
   return (
     <div
       className="product-card"

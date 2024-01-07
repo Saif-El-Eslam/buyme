@@ -128,7 +128,8 @@ export const getOrders = async (
       // .populate("user_id")
       // .populate("products.product_id")
       .populate({ path: "user_id", select: userFields })
-      .select(fields);
+      .select(fields)
+      .sort({ createdAt: -1 });
 
     const allOrdersCount = await Order.countDocuments();
 
@@ -193,7 +194,8 @@ export const getOrdersByUser = async (
       // .populate("user_id")
       // .populate("products.product_id")
       .populate({ path: "user_id", select: userFields })
-      .select(fields);
+      .select(fields)
+      .sort({ createdAt: -1 });
 
     const allOrdersCount = await Order.countDocuments({ user_id: id });
 
@@ -208,7 +210,9 @@ export const updateOrder = async (id, orders) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(id, orders, {
       new: true,
-    });
+    })
+      .populate("user_id")
+      .populate("products.product_id");
     return updatedOrder;
   } catch (error) {
     throw new Error(error.message);

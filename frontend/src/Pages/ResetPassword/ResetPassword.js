@@ -89,7 +89,7 @@ function ResetPassword() {
         if (prevTimer === 0) {
           clearInterval(interval);
           setOtpSent(false);
-          console.log("otp expired");
+
           return prevTimer;
         } else {
           return prevTimer - 1;
