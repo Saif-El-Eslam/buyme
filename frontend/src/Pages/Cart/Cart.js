@@ -34,8 +34,6 @@ function Cart() {
     });
   }, [refreshCart]);
 
-  console.log(cart);
-
   return (
     <div className="carts-page">
       <Header />
@@ -119,7 +117,12 @@ function Cart() {
                 <div className="cart-total-price">${cart.total_price}</div>
               </div>
 
-              <div className="cart-submit-wrapper button-wrapper">
+              <div
+                className="cart-submit-wrapper button-wrapper"
+                onClick={() => {
+                  navigate("/checkout");
+                }}
+              >
                 <div className="button-green">Checkout</div>
               </div>
             </div>

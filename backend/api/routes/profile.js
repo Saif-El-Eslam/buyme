@@ -79,41 +79,11 @@ router.put("/", verifyToken, async (req, res) => {
       req.body.address = null;
     }
 
-    // Validate payment method
-    if (
-      (req.body.payment_method.card_number.length ||
-        req.body.payment_method.expiry_date.length ||
-        req.body.payment_method.cvv.length) &&
-      (!req.body.payment_method.card_number.length ||
-        !req.body.payment_method.expiry_date.length ||
-        !req.body.payment_method.cvv.length)
-    ) {
-      return res.status(400).json({
-        message:
-          "Payment method is not valid, all fields should be provided or delete all",
-      });
-    }
-    if (
-      !req.body.payment_method?.card_number?.length &&
-      !req.body.payment_method?.expiry_date?.length &&
-      !req.body.payment_method?.cvv?.length
-    ) {
-      req.body.payment_method = null;
-    }
-    if (
-      req.body.payment_method &&
-      !validator.isCreditCard(req.body.payment_method?.card_number)
-    ) {
-      // Validate cridet card number
-      return res.status(400).json({ message: "Card number is not valid" });
-    }
-
     req.body.first_name ? (user.first_name = req.body.first_name) : null;
     req.body.last_name ? (user.last_name = req.body.last_name) : null;
     req.body.email ? (user.email = req.body.email) : null;
     req.body.phone ? (user.phone = req.body.phone) : null;
     user.address = req.body.address;
-    user.payment_method = req.body.payment_method;
 
     const updatedUser = await user.save();
 
@@ -125,7 +95,6 @@ router.put("/", verifyToken, async (req, res) => {
         email: updatedUser.email,
         phone: updatedUser.phone,
         address: updatedUser.address,
-        payment_method: updatedUser.payment_method,
       },
     });
   } catch (error) {

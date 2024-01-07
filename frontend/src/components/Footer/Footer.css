@@ -6,6 +6,8 @@
 
   background-color: #123026;
   color: aliceblue;
+
+  z-index: 999;
 }
 
 .footer .logo {

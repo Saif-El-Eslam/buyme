@@ -46,9 +46,9 @@ const orderSchema = mongoose.Schema(
           type: String,
           required: "City is required",
         },
-        state: {
+        governorate: {
           type: String,
-          required: "State is required",
+          required: "Governorate is required",
         },
         country: {
           type: String,
@@ -62,23 +62,32 @@ const orderSchema = mongoose.Schema(
     },
     payment_method: {
       type: {
-        card_number: {
+        payment_type: {
           type: String,
-          required: "Card number is required",
+          required: "Payment Type is required",
+          enum: ["cash", "card"],
+          default: "cash",
         },
-        expiry_date: {
-          type: String,
-          required: "Expiry date is required",
-        },
-        cvv: {
-          type: String,
-          required: "CVV is required",
-        },
-        notes: {
-          type: String,
+        card_details: {
+          type: {
+            card_number: {
+              type: String,
+              required: "Card number is required",
+            },
+            expiry_date: {
+              type: String,
+              required: "Expiry date is required",
+            },
+            cvv: {
+              type: String,
+              required: "CVV is required",
+            },
+            notes: {
+              type: String,
+            },
+          },
         },
       },
-      required: true,
     },
     status: {
       type: String,

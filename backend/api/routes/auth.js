@@ -28,7 +28,6 @@ router.post("/signup", async (req, res) => {
     phone,
     address,
     role,
-    payment_method,
   } = req.body;
 
   // Validate password, must be at least 8 characters long and contain at least 1 number, 1 uppercase letter, and 1 lowercase letter
@@ -47,10 +46,6 @@ router.post("/signup", async (req, res) => {
   if (!validator.isMobilePhone(phone, ["ar-EG"])) {
     return res.status(400).json({ message: "Phone number is not valid" });
   }
-  // Validate cridet card number
-  if (payment_method && !validator.isCreditCard(payment_method.card_number)) {
-    return res.status(400).json({ message: "Card number is not valid" });
-  }
 
   // Check if the email is already registered
   const existingUser = await getUserByEmail(email);
@@ -59,6 +54,10 @@ router.post("/signup", async (req, res) => {
   }
 
   const password_hash = await bcrypt.hash(password, 10);
+
+  const payment_method = {
+    payment_type: "cash",
+  };
 
   createUser({
     first_name,

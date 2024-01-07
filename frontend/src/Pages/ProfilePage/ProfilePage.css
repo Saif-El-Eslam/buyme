@@ -125,8 +125,8 @@
   padding: 0 0.5rem;
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 
   border: 1px solid rgba(1, 91, 61, 0.2);
   border-radius: 5px;
@@ -301,6 +301,7 @@
 .profile-address-section-governorate,
 .profile-address-section-street,
 .profile-address-section-notes,
+.profile-payment-section-payment-type,
 .profile-payment-section-card-number,
 .profile-payment-section-expiry-date,
 .profile-payment-section-cvv,
@@ -311,6 +312,63 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.profile-payment-field-wrapper {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  border: 1px solid rgba(1, 91, 61, 0.2);
+  border-radius: 5px;
+}
+.profile-payment-section-payment-type-wrapper {
+  height: 40px;
+  width: calc(100% - 1rem);
+  padding: 0 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  background-color: rgba(215, 215, 215, 0.3);
+}
+.profile-payment-field-wrapper > *:not(:last-child) {
+  border-bottom: 1px solid rgba(1, 91, 61, 0.5);
+}
+
+.profile-payment-section-payment-type-cash,
+.profile-payment-section-payment-type-card {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  font-size: 1.2rem;
+  color: #123026;
+
+  /* cursor: pointer; */
+}
+
+.profile-payment-section-payment-type-card-text {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.profile-payment-section-payment-type-card-text-sub {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: rgba(18, 48, 38, 0.8);
 }
 
 .profile-section-header {

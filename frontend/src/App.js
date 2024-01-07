@@ -14,6 +14,7 @@ import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
 import AdminAddProduct from "./Pages/AdminAddProduct/AdminAddProduct";
 import OrderDetails from "./Pages/OrderDetails/OrderDetails";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import OrderOverview from "./Pages/Checkout/Checkout";
 // import TokenService from "./Services/Auth";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
 
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<OrderOverview />} />
 
         <Route path="/profile/login" element={<Login />} />
         <Route path="/profile/signup" element={<SignUp />} />

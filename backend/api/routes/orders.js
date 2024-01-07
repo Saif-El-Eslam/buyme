@@ -15,6 +15,7 @@ import {
   getOrdersByStatus,
 } from "../models/order.js";
 import { getProductById, updateProduct } from "../models/product.js";
+import { updateCart } from "../models/cart.js";
 import { verifyToken } from "../middlewares/token.js";
 
 const router = express.Router();
@@ -57,6 +58,12 @@ router.get("/days/:n", verifyToken, async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    if (req.role !== "user" && req.role !== "admin") {
+      return res.status(403).json({
+        message: "You are not authorized to access this route",
+      });
+    }
+
     const order = await getOrderById(req.params.id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
@@ -92,12 +99,15 @@ router.post("/", verifyToken, async (req, res) => {
       });
     }
 
-    const { products, delivery_address, payment_method, size } = req.body;
-    if (!products || !delivery_address || !payment_method) {
-      return res.status(400).json({ message: "Missing required fields" });
+    const { products, delivery_address, payment_method, cart_id } = req.body;
+    if (!products.length || !delivery_address || !payment_method) {
+      return res.status(400).json({ message: "Missing required inputs" });
     }
 
-    if (payment_method && !validator.isCreditCard(payment_method.card_number)) {
+    if (
+      payment_method?.card_details &&
+      !validator.isCreditCard(payment_method?.card_details?.card_number)
+    ) {
       return res.status(400).json({ message: "Invalid card number" });
     }
 
@@ -122,8 +132,6 @@ router.post("/", verifyToken, async (req, res) => {
 
       product.sizes[sizeIndex].quantity -= item.quantity;
       product.quantity -= item.quantity;
-      product.size = size;
-
       await updateProduct(product._id, product);
     }
 
@@ -136,8 +144,11 @@ router.post("/", verifyToken, async (req, res) => {
       payment_method,
     };
 
-    const result = await createOrder(newOrder);
-    res.json(result);
+    const order = await createOrder(newOrder);
+
+    await updateCart(cart_id, { products: [] });
+
+    res.status(201).json({ order, message: "Order created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

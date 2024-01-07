@@ -32,7 +32,7 @@ function Signup() {
           navigate("/profile/login");
         }, 1000);
       } else {
-        setError(response);
+        setError(response.data.message);
         setTimeout(() => {
           setError(false);
         }, 3000);

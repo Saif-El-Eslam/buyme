@@ -35,7 +35,10 @@ function ProfilePage() {
     email: "",
     phone: "",
     address: {},
-    payment_method: {},
+    payment_method: {
+      payment_type: "",
+      card_details: {},
+    },
   });
 
   useEffect(() => {
@@ -46,17 +49,20 @@ function ProfilePage() {
 
     // get profile info
     getProfile().then((response) => {
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setUser({
           first_name: response.data.first_name || "",
           last_name: response.data.last_name || "",
           email: response.data.email || "",
           phone: response.data.phone || "",
           address: response.data.address || null,
-          payment_method: response.data.payment_method || null,
+          payment_method: {
+            payment_type: response.data.payment_method?.payment_type || "",
+            card_details: response.data.payment_method?.card_details || null,
+          },
         });
       } else {
-        setInfoMessage(response.data.message);
+        setInfoMessage(response?.data.message);
         setInfoMessageType("error");
         setTimeout(() => {
           setInfoMessage("");
@@ -536,7 +542,40 @@ function ProfilePage() {
                   Payment Information
                 </div> */}
                   <div className="profile-payment-section-content">
-                    <div className="profile-payment-section-card-number">
+                    <div className="profile-payment-section-payment-type">
+                      <div className="profile-payment-section-sub-title">
+                        Payment Type
+                      </div>
+
+                      <div className="profile-payment-field-wrapper">
+                        <div className="profile-payment-section-payment-type-wrapper">
+                          <div className="profile-payment-section-payment-type-cash">
+                            <div className="selector-circle">
+                              <div className="selector-circle-selected"></div>
+                            </div>
+
+                            <div className="profile-payment-section-payment-type-cash-text">
+                              Cash
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="profile-payment-section-payment-type-wrapper">
+                          <div className="profile-payment-section-payment-type-card">
+                            <div className="selector-circle"></div>
+
+                            <div className="profile-payment-section-payment-type-card-text">
+                              Card{" "}
+                              <span className="profile-payment-section-payment-type-card-text-sub">
+                                (Coming Soon)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* <div className="profile-payment-section-card-number">
                       <div className="profile-payment-section-sub-title">
                         Card Number
                       </div>
@@ -605,7 +644,7 @@ function ProfilePage() {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> 
 
                     <div className="profile-payment-section-notes">
                       <div className="profile-payment-section-sub-title">
@@ -628,14 +667,14 @@ function ProfilePage() {
                           }
                         />
                       </div>
-                    </div>
+                    </div>*/}
                   </div>
 
-                  <div className="profile-payment-section-button">
+                  {/* <div className="profile-payment-section-button">
                     <div className="button-wrapper" onClick={handleUpdateInfo}>
                       <div className="button-green">Update Payment</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>

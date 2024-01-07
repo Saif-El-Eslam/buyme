@@ -172,6 +172,37 @@ code {
   animation: spin 2s linear infinite;
 }
 
+.selector-circle {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 50%;
+  background-color: transparent;
+  margin: 10px;
+
+  border: 2px solid #123026;
+
+  transition: all 0.2s ease-in-out;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selector-circle-selected {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #123026;
+
+  border: 2px solid #123026;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
