@@ -82,7 +82,8 @@ export const getProductsByPage = async (
   fields,
   sortBy = "quantity",
   sortDirection = 1,
-  sizes = []
+  sizes = [],
+  search = ""
 ) => {
   try {
     const products = await Product.find()
@@ -95,19 +96,33 @@ export const getProductsByPage = async (
             }
           : {}
       )
+      // where title then description includes search
+      .where({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      })
       .sort({ [sortBy]: sortDirection })
       .limit(n)
       .skip(m)
       .select(fields);
-    const totalProducts = await Product.countDocuments().where(
-      sizes.length > 0
-        ? {
-            sizes: {
-              $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
-            },
-          }
-        : {}
-    );
+    const totalProducts = await Product.countDocuments()
+      .where(
+        sizes.length > 0
+          ? {
+              sizes: {
+                $elemMatch: { size: { $in: sizes }, quantity: { $gt: 0 } },
+              },
+            }
+          : {}
+      )
+      .where({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      });
 
     return { products, totalProducts };
   } catch (error) {

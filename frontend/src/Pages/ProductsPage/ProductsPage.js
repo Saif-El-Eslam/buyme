@@ -27,7 +27,7 @@ function ProductsPage() {
     getProductsByPage(
       pageNumber,
       sort,
-      size.map((size) => size.value).join(",")
+      size.map((size) => size.value)
     ).then((res) => {
       if (res?.status === 200) {
         setProducts(res?.data?.products);

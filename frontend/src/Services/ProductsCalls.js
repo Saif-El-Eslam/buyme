@@ -1,12 +1,18 @@
 import api from "./Middlewares";
 import TokenService from "./AuthAPICalls";
 
-export const getProductsByPage = async (pageNum, sortFields, sizes) => {
+export const getProductsByPage = async (pageNum, sortFields, sizes, search) => {
   try {
     return await api.get(
-      `/products/skip/${pageNum > 0 ? pageNum - 1 : 0}/take/10/${
-        sortFields.sortField
-      }/${sortFields.sortDirection}/${sizes}`
+      `/products/skip/${pageNum > 0 ? pageNum - 1 : 0}/take/10`,
+      {
+        params: {
+          search,
+          sizes,
+          sortBy: sortFields.sortField,
+          sortDirection: sortFields.sortDirection,
+        },
+      }
     );
   } catch (error) {
     return error.response;
@@ -23,7 +29,14 @@ export const getProductsByPageByCategory = async (
     return await api.get(
       `/products/category/${category}/skip/${
         pageNum > 0 ? pageNum - 1 : 0
-      }/take/10/${sortFields.sortField}/${sortFields.sortDirection}/${sizes}`
+      }/take/10/`,
+      {
+        params: {
+          sizes,
+          sortBy: sortFields.sortField,
+          sortDirection: sortFields.sortDirection,
+        },
+      }
     );
   } catch (error) {
     return error.response;

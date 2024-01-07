@@ -33,38 +33,35 @@ router.get("/", async (req, res) => {
 });
 
 // get n products after skipping m products
-router.get(
-  "/skip/:pagesCount/take/:ordersCount/:sortBy/:sortDirection/:sizes?",
-  async (req, res) => {
-    try {
-      const fields = ["id", "title", "price", "category", "images", "quantity"];
+router.get("/skip/:pagesCount/take/:ordersCount", async (req, res) => {
+  try {
+    const fields = ["id", "title", "price", "category", "images", "quantity"];
 
-      const ordersCount = parseInt(req.params.ordersCount) || 10;
-      const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
-      const sortBy =
-        req.params.sortBy && req.params.sortBy !== "undefined"
-          ? req.params.sortBy
-          : "quantity";
-      const sortDirection = parseInt(req.params.sortDirection) || 1;
-      const sizes = req.params.sizes && req.params.sizes.split(",");
+    const search = req.query.search || "";
+    const sortBy = req.query.sortBy || "quantity";
+    const sortDirection = parseInt(req.query.sortDirection) || 1;
+    const sizes = req.query.sizes;
 
-      const { products, totalProducts } = await getProductsByPage(
-        ordersCount,
-        pageNum,
-        fields,
-        sortBy,
-        sortDirection,
-        sizes
-      );
+    const ordersCount = parseInt(req.params.ordersCount) || 10;
+    const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
 
-      const pagesCount = Math.ceil(totalProducts / ordersCount);
+    const { products, totalProducts } = await getProductsByPage(
+      ordersCount,
+      pageNum,
+      fields,
+      sortBy,
+      sortDirection,
+      sizes,
+      search
+    );
 
-      res.json({ totalProducts, pagesCount, products });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    const pagesCount = Math.ceil(totalProducts / ordersCount);
+
+    res.json({ totalProducts, pagesCount, products });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-);
+});
 
 router.get("/:id", async (req, res) => {
   try {
@@ -96,19 +93,17 @@ router.get("/category/:category", async (req, res) => {
 });
 
 router.get(
-  "/category/:category/skip/:pagesCount/take/:ordersCount/:sortBy/:sortDirection/:sizes?",
+  "/category/:category/skip/:pagesCount/take/:ordersCount",
   async (req, res) => {
     try {
       const fields = ["id", "title", "price", "category", "images", "quantity"];
 
       const ordersCount = parseInt(req.params.ordersCount) || 10;
       const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
-      const sortBy =
-        req.params.sortBy && req.params.sortBy !== "undefined"
-          ? req.params.sortBy
-          : "quantity";
-      const sortDirection = parseInt(req.params.sortDirection) || 1;
-      const sizes = req.params.sizes && req.params.sizes.split(",");
+
+      const sortBy = req.query.sortBy || "quantity";
+      const sortDirection = parseInt(req.query.sortDirection) || 1;
+      const sizes = req.query.sizes;
 
       const { products, totalProducts } = await getProductsByPageByCategory(
         ordersCount,

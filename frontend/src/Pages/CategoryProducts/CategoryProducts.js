@@ -31,7 +31,7 @@ function CategoryProducts() {
       pageNumber,
       category,
       sort,
-      size.map((size) => size.value).join(",")
+      size.map((size) => size.value)
     ).then((res) => {
       if (res?.status === 200) {
         setCategoryProducts(res.data?.products);
