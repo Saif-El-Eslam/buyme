@@ -42,6 +42,8 @@ function ProfilePage() {
   });
 
   useEffect(() => {
+    setLoading(true);
+
     // redirect to login if not logged in
     if (!TokenService.getToken()) {
       navigate("/profile/login");
@@ -61,6 +63,8 @@ function ProfilePage() {
             card_details: response.data.payment_method?.card_details || null,
           },
         });
+
+        setLoading(false);
       } else {
         setInfoMessage(response?.data.message);
         setInfoMessageType("error");

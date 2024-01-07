@@ -20,25 +20,52 @@ import { verifyToken } from "../middlewares/token.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, async (req, res) => {
-  try {
-    const role = req.role;
-    if (role === "admin") {
-      const orders = await getOrders();
-      res.json(orders);
-    } else if (role === "user") {
-      const user_id = req.user_id;
-      const orders = await getOrdersByUser(user_id);
-      res.json(orders);
-    } else {
-      return res.status(403).json({
-        message: "You are not authorized to access this route",
-      });
+router.get(
+  "/skip/:pagesCount/take/:ordersCount",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const role = req.role;
+      const fields = ["_id", "status", "total_price", "createdAt"];
+      const userFields = ["email"];
+
+      const ordersCount = parseInt(req.params.ordersCount) || 10;
+      const pageNum = parseInt(req.params.pagesCount) * ordersCount || 0;
+
+      if (role === "admin") {
+        const { orders, allOrdersCount } = await getOrders(
+          fields,
+          userFields,
+          ordersCount,
+          pageNum
+        );
+
+        const pagesCount = Math.ceil(allOrdersCount / ordersCount);
+
+        res.json({ orders, allOrdersCount, pagesCount });
+      } else if (role === "user") {
+        const user_id = req.user_id;
+        const { orders, allOrdersCount } = await getOrdersByUser(
+          user_id,
+          fields,
+          userFields,
+          ordersCount,
+          pageNum
+        );
+
+        const pagesCount = Math.ceil(allOrdersCount / ordersCount);
+
+        res.json({ orders, allOrdersCount, pagesCount });
+      } else {
+        return res.status(403).json({
+          message: "You are not authorized to access this route",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 router.get("/days/:n", verifyToken, async (req, res) => {
   try {

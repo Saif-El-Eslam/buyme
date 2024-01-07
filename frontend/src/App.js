@@ -9,7 +9,7 @@ import CategoryProducts from "./Pages/CategoryProducts/CategoryProducts";
 import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import Cart from "./Pages/Cart/Cart";
 import AdminProducts from "./Pages/AdminProducts/AdminProducts";
-import AdminOrders from "./Pages/AdminOrders/AdminOrders";
+import Orders from "./Pages/Orders/Orders";
 import AdminEditProduct from "./Pages/AdminEditProduct/AdminEditProduct";
 import AdminAddProduct from "./Pages/AdminAddProduct/AdminAddProduct";
 import OrderDetails from "./Pages/OrderDetails/OrderDetails";
@@ -31,6 +31,7 @@ function App() {
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<OrderOverview />} />
+        <Route path="/orders" element={<Orders />} />
 
         <Route path="/profile/login" element={<Login />} />
         <Route path="/profile/signup" element={<SignUp />} />
@@ -44,7 +45,7 @@ function App() {
           element={<AdminEditProduct />}
         />
         <Route path="/admin/products/add" element={<AdminAddProduct />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/orders" element={<Orders />} />
         <Route path="/admin/orders/:id" element={<OrderDetails />} />
       </Routes>
     </BrowserRouter>

@@ -158,7 +158,7 @@ function Footer() {
                   loggedIn
                     ? admin
                       ? navigate("/admin/orders")
-                      : navigate("/profile/orders")
+                      : navigate("/orders")
                     : navigate("/profile/login")
                 }
               >

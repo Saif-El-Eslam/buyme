@@ -115,12 +115,24 @@ export const createOrder = async (order) => {
 };
 
 // get all orders
-export const getOrders = async () => {
+export const getOrders = async (
+  fields = [],
+  userFields = [],
+  ordersCount,
+  pageNum
+) => {
   try {
     const orders = await Order.find()
-      .populate("user_id")
-      .populate("products.product_id");
-    return orders;
+      .skip(pageNum)
+      .limit(ordersCount)
+      // .populate("user_id")
+      // .populate("products.product_id")
+      .populate({ path: "user_id", select: userFields })
+      .select(fields);
+
+    const allOrdersCount = await Order.countDocuments();
+
+    return { orders, allOrdersCount };
   } catch (error) {
     throw new Error(error.message);
   }
@@ -167,12 +179,25 @@ export const getOrderById = async (id) => {
 };
 
 // get orders by user
-export const getOrdersByUser = async (id) => {
+export const getOrdersByUser = async (
+  id,
+  fields = [],
+  userFields = [],
+  ordersCount,
+  pageNum
+) => {
   try {
     const orders = await Order.find({ user_id: id })
-      .populate("user_id")
-      .populate("products.product_id");
-    return orders;
+      .skip(pageNum)
+      .limit(ordersCount)
+      // .populate("user_id")
+      // .populate("products.product_id")
+      .populate({ path: "user_id", select: userFields })
+      .select(fields);
+
+    const allOrdersCount = await Order.countDocuments({ user_id: id });
+
+    return { orders, allOrdersCount };
   } catch (error) {
     throw new Error(error.message);
   }

@@ -25,13 +25,16 @@ export const getOrdersByStatus = async (status) => {
   }
 };
 
-export const getOrdersByUser = async () => {
+export const getOrders = async (pageNum) => {
   try {
-    return await api.get(`/orders`, {
-      headers: {
-        Authorization: `Bearer ${TokenService.getToken()}`,
-      },
-    });
+    return await api.get(
+      `/orders/skip/${pageNum > 0 ? pageNum - 1 : 0}/take/10`,
+      {
+        headers: {
+          Authorization: `Bearer ${TokenService.getToken()}`,
+        },
+      }
+    );
   } catch (error) {
     return error.response;
   }
