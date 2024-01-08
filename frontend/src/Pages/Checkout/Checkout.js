@@ -396,7 +396,10 @@ function OrderOverview() {
         </div>
 
         <div className="checkout-submit">
-          <div className="checkout-return-to-cart-link">
+          <div
+            className="checkout-return-to-cart-link"
+            onClick={() => navigate("/cart")}
+          >
             <img
               src="/arrow-left-black.png"
               alt=""

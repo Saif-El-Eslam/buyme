@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import TokenService from "../../Services/AuthAPICalls";
+import Search from "../Search/Search";
 
 function Header() {
   const urlParts = window.location.href.split("/");
@@ -13,6 +14,7 @@ function Header() {
   // get the size of the screen
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const loggedIn = TokenService.getToken() ? true : false;
   const admin = TokenService.getRole() === "admin" ? true : false;
@@ -50,6 +52,10 @@ function Header() {
   }, []);
   return (
     <div className="header">
+      {searchOpen && (
+        <Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+      )}
+
       <Link to={!admin ? "/" : "/admin/products"} className="nav-link">
         <div className="logo">
           <img src="/logo.svg" alt="logo" />
@@ -162,7 +168,7 @@ function Header() {
       )}
 
       <div className="left-icons">
-        <div className="icon">
+        <div className="icon" onClick={() => setSearchOpen(true)}>
           <img src="/search.png" alt="search" />
         </div>
         <div

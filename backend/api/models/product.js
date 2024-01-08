@@ -96,7 +96,7 @@ export const getProductsByPage = async (
             }
           : {}
       )
-      // where title then description includes search
+      // where title then description includes search, give more weight to title
       .where({
         $or: [
           { title: { $regex: search, $options: "i" } },

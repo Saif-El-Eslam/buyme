@@ -117,13 +117,26 @@ function Cart() {
                 <div className="cart-total-price">${cart.total_price}</div>
               </div>
 
-              <div
-                className="cart-submit-wrapper button-wrapper"
-                onClick={() => {
-                  navigate("/checkout");
-                }}
-              >
-                <div className="button-green">Checkout</div>
+              <div className="cart-checkout">
+                <div
+                  className="checkout-return-to-cart-link"
+                  onClick={() => navigate("/products")}
+                >
+                  <img
+                    src="/arrow-left-black.png"
+                    alt=""
+                    className="checkout-left-arrow"
+                  />
+                  Continue Shopping
+                </div>
+                <div
+                  className="cart-submit-wrapper button-wrapper"
+                  onClick={() => {
+                    navigate("/checkout");
+                  }}
+                >
+                  <div className="button-green">Checkout</div>
+                </div>
               </div>
             </div>
           </div>
