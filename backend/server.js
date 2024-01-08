@@ -27,5 +27,5 @@ app.use("/api/orders", ordersRouter);
 app.use("/api/profile", profileRouter);
 
 app.listen(process.env.SERVER_PORT, () => {
-  console.log(`Server is listening an port:${process.env.SERVER_PORT}`);
+  console.log(`Server is listening on Port ${process.env.SERVER_PORT}`);
 });
