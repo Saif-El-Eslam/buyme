@@ -78,41 +78,41 @@ function HomePage() {
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"T-shirts"}
-                  imgURL={"http://localhost:3001/categories/T-shirt.jpg"}
+                  imgURL={"/categories/T-shirt.jpg"}
                 />
               </div>
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"shirts"}
-                  imgURL={"http://localhost:3001/categories/shirt.jpg"}
+                  imgURL={"/categories/shirt.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"pants"}
-                  imgURL={"http://localhost:3001/categories/pants.jpg"}
+                  imgURL={"/categories/pants.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"shorts"}
-                  imgURL={"http://localhost:3001/categories/shorts.jpg"}
+                  imgURL={"/categories/shorts.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"jackets"}
-                  imgURL={"http://localhost:3001/categories/jacket.jpg"}
+                  imgURL={"/categories/jacket.jpg"}
                 />
               </div>
 
               <div className="category-card-wrapper">
                 <CategoryCard
                   category={"hoodies"}
-                  imgURL={"http://localhost:3001/categories/hoodie.jpg"}
+                  imgURL={"/categories/hoodie.jpg"}
                 />
               </div>
             </div>
@@ -146,7 +146,7 @@ function HomePage() {
               >
                 <img
                   className="section-3-wrapper-items-cards-arrow-img"
-                  src="http://localhost:3001/arrow-left-black.png"
+                  src="/arrow-left-black.png"
                   alt="arrow"
                 />
               </div>
@@ -165,7 +165,7 @@ function HomePage() {
               >
                 <img
                   className="section-3-wrapper-items-cards-arrow-img"
-                  src="http://localhost:3001/arrow-right-black.png"
+                  src="/arrow-right-black.png"
                   alt="arrow"
                 />
               </div>

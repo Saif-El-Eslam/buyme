@@ -284,7 +284,7 @@ function ProductForm({ product, setProduct, onAction, isCreateProduct }) {
                         onClick={() => handleDeleteImage(image)}
                       >
                         <img
-                          src="http://localhost:3001/close-white.png"
+                          src="/close-white.png"
                           alt=""
                         />
                       </div>

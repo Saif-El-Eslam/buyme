@@ -74,7 +74,7 @@ function MultiSelector({
         >
           <img
             className="multi-selector-arrow-img"
-            src="http://localhost:3001/arrow-down-black.png"
+            src="/arrow-down-black.png"
             alt="arrow"
           />
         </div>

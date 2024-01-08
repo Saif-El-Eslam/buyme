@@ -12,7 +12,7 @@
 
 .section-1 {
   height: 100%;
-  background-image: url("http://localhost:3001/home-bg.jpg");
+  background-image: url("/home-bg.jpg");
   background-repeat: no-repeat;
 
   background-size: cover;

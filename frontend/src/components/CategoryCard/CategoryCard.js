@@ -26,13 +26,13 @@ function CategoryCard({ category, imgURL }) {
           {hovered ? (
             <img
               className="category-arrow-img"
-              src="http://localhost:3001/right-arrow.png"
+              src="/right-arrow.png"
               alt="arrow"
             />
           ) : (
             <img
               className="category-arrow-img"
-              src="http://localhost:3001/arrow-right-black.png"
+              src="/arrow-right-black.png"
               alt="arrow"
             />
           )}

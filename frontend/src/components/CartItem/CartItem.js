@@ -162,7 +162,7 @@ function CartItem({
             className="cart-item-remove-button font-3"
             onClick={() => handleDeleteCardItem()}
           >
-            <img src="http://localhost:3001/delete.png" alt="trash" />
+            <img src="/delete.png" alt="trash" />
           </div>
         </div>
       </div>

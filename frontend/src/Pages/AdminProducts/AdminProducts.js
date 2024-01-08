@@ -122,7 +122,7 @@ function AdminProducts() {
                       onDeleteProduct(product._id);
                     }}
                   >
-                    <img src="http://localhost:3001/delete.png" alt="delete" />
+                    <img src="/delete.png" alt="delete" />
                   </div>
                 </div>
               </div>
