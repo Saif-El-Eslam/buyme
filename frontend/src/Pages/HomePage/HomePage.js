@@ -38,6 +38,7 @@ function HomePage() {
       setLoading(false);
     });
   }, []);
+
   return (
     <div className="home-page">
       <Header />
