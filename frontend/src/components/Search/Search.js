@@ -3,6 +3,7 @@ import "./Search.css";
 import { useNavigate } from "react-router-dom";
 import InfoMessage from "../../components/Messages/InfoMessage";
 import { getProductsByPage } from "../../Services/ProductsCalls";
+import TokenService from "../../Services/AuthAPICalls";
 
 function Search({ searchOpen, setSearchOpen }) {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ function Search({ searchOpen, setSearchOpen }) {
 
   const [searchValue, setSearchValue] = useState("");
   const [products, setProducts] = useState([]);
+
+  const admin = TokenService.getRole() === "admin" ? true : false;
 
   useEffect(() => {
     // Function to handle clicks outside the menu
@@ -114,7 +117,10 @@ function Search({ searchOpen, setSearchOpen }) {
               className="search-result-item"
               key={i}
               onClick={() => {
-                navigate(`/products/${product?._id}`);
+                admin
+                  ? navigate(`/admin/products/${product?._id}/update`)
+                  : navigate(`/products/${product?._id}`);
+
                 setSearchOpen(false);
               }}
             >
