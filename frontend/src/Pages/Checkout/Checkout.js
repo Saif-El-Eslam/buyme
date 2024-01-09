@@ -57,6 +57,9 @@ function OrderOverview() {
     getProfile().then((res) => {
       if (res.status === 200) {
         setProfile(res.data);
+        if (!res.data.address) {
+          setNewAddressSelected(true);
+        }
       } else {
         setInfoMessage(res?.data.message);
 
@@ -244,7 +247,7 @@ function OrderOverview() {
                   </div>
 
                   <div className="delivery-address-selection-text font-5">
-                    Other Address
+                    {profile?.address ? "New Address" : "Address"}
                   </div>
                 </div>
 
